@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg" style="background-color: #222">
+  <p
+    style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif;color:white"
+  >
+    Hi {{ name }}
+  </p>
+  <div
+    class="collapse navbar-collapse justify-content-end"
+    id="collapseExample"
+    [ngbCollapse]="isCollapsed"
+  >
+    <ul class="navbar-nav">
+      <li class="nav-item" ngbDropdown>
+        <a class="nav-link" id="dropdownBasic1" ngbDropdownToggle>
+          <i class="now-ui-icons users_single-02"></i>
+          <p><span class="d-lg-none d-md-block">Account</span></p>
+        </a>
+        <div
+          class="dropdown-menu dropdown-menu-right"
+          style="background-color:crimson"
+          ngbDropdownMenu
+          aria-labelledby="dropdownBasic1"
+        >
+          <a
+            (click)="logout()"
+            class="dropdown-item"
+            href="#"
+            style="color:white"
+          >
+            <i class="now-ui-icons media-1_button-power"></i>Logout</a
+          >
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>

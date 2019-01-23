@@ -1,0 +1,148 @@
+<br />
+<br />
+<div class="main-content">
+  <ngx-loading
+    [show]="loading"
+    [config]="{
+      fullScreenBackdrop: true,
+      backdropBorderRadius: '3px',
+      primaryColour: '#05386B',
+      secondaryColour: '#379683',
+      tertiaryColour: '#5CDB95'
+    }"
+    [template]="customLoadingTemplate"
+  ></ngx-loading>
+  <mat-card style="width:900px;right: 0%;">
+    <div class="row">
+      <mat-form-field
+        style="left:225px;font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-select
+          (selectionChange)="changeholidayview($event)"
+          placeholder="Country"
+          [formControl]="countryname"
+          required
+        >
+          <mat-option value="India">
+            <img
+              class="example-option-img"
+              aria-hidden
+              src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/800px-Flag_of_India.svg.png"
+              height="20"
+              width="24"
+            />
+            India
+          </mat-option>
+          <mat-option value="USA">
+            <img
+              class="example-option-img"
+              aria-hidden
+              src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/800px-Flag_of_the_United_States.svg.png"
+              height="20"
+              width="24"
+            />
+            USA
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <br />
+    <div class="row" *ngFor="let field of holidaylist; let k = index">
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Occasion"
+            [(ngModel)]="field.occasion"
+            name="{{field.occasion}}"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            [matDatepicker]="dates"
+            [(ngModel)]="field.date"
+            placeholder="Date"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+
+          <mat-datepicker #dates></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3 " (click)="deletesholiday(k)">
+        <button
+          type="button"
+          style="background-color:transparent;border: none;padding: 0;"
+        >
+          <i style="color: red" class="material-icons"> delete </i>
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Occasion"
+            [(ngModel)]="holidayAttribute.occasion"
+            name="newAttributeClient"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </mat-form-field>
+      </div>
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            [matDatepicker]="date"
+            [(ngModel)]="holidayAttribute.date"
+            placeholder="Date"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+          <mat-datepicker #date></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3" style="font-size: 10pt" (click)="addholiday()">
+        <button
+          type="button"
+          style="background-color:transparent;border: none;padding: 0;"
+        >
+          <i style="color: green" class="material-icons">
+            add_circle_outline
+          </i>
+        </button>
+      </div>
+    </div>
+    <br />
+    <button
+      mat-button
+      color="primary"
+      style="float: left; left: 150px;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      class="no-hover-effect"
+      [disabled]="!submitbutton"
+      (click)="onSave()"
+    >
+      Save
+    </button>
+    <br />
+  </mat-card>
+</div>

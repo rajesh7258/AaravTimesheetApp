@@ -1,0 +1,100 @@
+<div class="logo text-center" style="background-color:#272727">
+  <a href="http://www.aaravsolutions.com/" class="simple-text">
+    <!--
+      img style="background: rgba(0,0,0, 0.8)" src="./assets/img/logo.png" /
+    -->
+
+    <img
+      [@rotatedState]="state"
+      style="height:60px"
+      src="./assets/img/logo.png"
+    />
+  </a>
+</div>
+
+<div class="sidebar-wrapper">
+  <ul class="nav">
+    <!--
+      >li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
+          <a [routerLink]="[menuItem.path]">
+              <i class="now-ui-icons {{menuItem.icon}}"></i>
+              <p>{{menuItem.title}}</p>
+          </a>
+      </li
+    -->
+    <!--
+      <li routerLinkActive="active" class="nav-item" style="color:red">
+          <a [routerLink]="'/recentdata'">
+              <i class="now-ui-icons business_chart-bar-32"></i>
+              <p>Recent Data</p>
+          </a>
+      </li>
+      <li routerLinkActive="active" class="nav-item">
+          <a [routerLink]="'/devices'">
+              <i class="design_app now-ui-icons "></i>
+              <p>Devices</p>
+          </a>
+      </li>
+      <li routerLinkActive="active" class="nav-item">
+          <a [routerLink]="'/reports'">
+              <i class="now-ui-icons files_single-copy-04"></i>
+              <p>Reports</p>
+          </a>
+      </li>
+      <li routerLinkActive="active" class="nav-item">
+          <a [routerLink]="'/settings'">
+              <i class="now-ui-icons loader_gear"></i>
+              <p>Settings</p>
+          </a>
+      </li>
+      <li routerLinkActive="active" class="nav-item">
+          <a [routerLink]="'/user-profile'">
+              <i class="now-ui-icons users_single-02"></i>
+              <p>User Profile</p>
+          </a>
+      </li>
+    -->
+    <li *ngIf="isadmin === true" routerLinkActive="active" class="nav-item">
+      <a [routerLink]="'/createaccount'">
+        <i class="now-ui-icons users_single-02"></i>
+        <p>Create Account</p>
+      </a>
+    </li>
+    <li routerLinkActive="active" class="nav-item">
+      <a [routerLink]="'/viewprofile'">
+        <i class="material-icons">assignment_ind</i>
+        <p>Profile</p>
+      </a>
+    </li>
+    <li routerLinkActive="active" class="nav-item">
+      <a [routerLink]="'/timesheet'">
+        <i class="now-ui-icons files_single-copy-04"></i>
+        <p>Timesheet</p>
+      </a>
+    </li>
+    <li *ngIf="isadmin === true" routerLinkActive="active" class="nav-item">
+      <a [routerLink]="'/createholiday'">
+        <i class="now-ui-icons files_paper"></i>
+        <p>Create Holiday List</p>
+      </a>
+    </li>
+    <li routerLinkActive="active" class="nav-item">
+      <a [routerLink]="'/viewholiday'">
+        <i class="now-ui-icons ui-1_calendar-60"></i>
+        <p>Holidays</p>
+      </a>
+    </li>
+    <li *ngIf="ismanager === true" routerLinkActive="active" class="nav-item">
+      <a [routerLink]="'/manageractivites'">
+        <i class="now-ui-icons ui-1_calendar-60"></i>
+        <p>Manager Activites</p>
+      </a>
+    </li>
+    <li routerLinkActive="active" class="nav-item">
+      <a [routerLink]="'/myrequest'">
+        <i class="now-ui-icons ui-1_calendar-60"></i>
+        <p>Myrequests</p>
+      </a>
+    </li>
+  </ul>
+</div>

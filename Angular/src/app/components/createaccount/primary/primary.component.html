@@ -1,0 +1,661 @@
+<br />
+<br />
+<div class="main-content">
+  <br />
+  <div *ngIf="currentFileUpload" class="progress" style="height:15px">
+    <div
+      class="progress-bar progress-bar-info "
+      role="progressbar"
+      attr.aria-valuenow="{{progress.percentage}}"
+      aria-valuemin="0"
+      aria-valuemax="120"
+      [ngStyle]="{ width: progress.percentage + '%' }"
+    >
+      {{ progress.percentage }}%
+    </div>
+  </div>
+  <div class="row" class="glass">
+    <div class="col-md-3 pl-1">
+      <div class="container"><img class="imgclass" [src]="imagepath" /></div>
+      <br />
+    </div>
+    <div class="col-md-2 pl-1">
+      <br />
+      <br />
+      <div class="row">
+        <input
+          type="file"
+          id="base-input"
+          (change)="selectFile($event)"
+          class="form-control form-input form-style-base"
+        />
+        <input
+          type="text"
+          id="fake-input"
+          class="form-control form-input form-style-fake"
+          readonly
+        />
+        <span class="glyphicon glyphicon-open input-place"></span>
+      </div>
+      <br />
+    </div>
+  </div>
+  <hr />
+  <br />
+  <form [formGroup]="registerform" (ngSubmit)="onSubmit()">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+        <mat-expansion-panel-header style="background-color: #314455;">
+          <mat-panel-title
+            style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+          >
+            Primary
+          </mat-panel-title>
+          <mat-panel-description> </mat-panel-description>
+        </mat-expansion-panel-header>
+        <br />
+
+        <div class="row">
+          <div class="col-md-3 pl-1">
+            <!--
+              <div class="form-group">
+                <label style="color:black">Employee ID</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Eg.AS028"
+                />
+              </div>
+            -->
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="EmployeeID"
+                formControlName="Employeeid"
+                [value]=""
+                readonly
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="First Name"
+                formControlName="firstname"
+                value=""
+                readonly
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Middle Name"
+                formControlName="middlename"
+                value=""
+                readonly
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Last Name"
+                formControlName="lastname"
+                value=""
+                required
+                readonly
+              />
+              <mat-error *ngIf="f.lastname.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="EmployeeType"
+                formControlName="employeetype"
+                value=""
+                required
+                readonly
+              />
+              <mat-error *ngIf="f.employeetype.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Department"
+                formControlName="department"
+                value=""
+                required
+                readonly
+              />
+              <mat-error *ngIf="f.department.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Desigination"
+                formControlName="desigination"
+                value=""
+                required
+                readonly
+              />
+              <mat-error *ngIf="f.desigination.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Practice"
+                formControlName="practice"
+                value=""
+                required
+                readonly
+              />
+              <mat-error *ngIf="f.practice.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Office Email"
+                formControlName="officeemail"
+                value=""
+                required
+                readonly
+              />
+              <mat-error
+                *ngIf="
+                  f.officeemail.hasError('email') &&
+                  !f.officeemail.hasError('required')
+                "
+              >
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="f.officeemail.hasError('required')">
+                Email is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Personal Email"
+                formControlName="personalemail"
+                value=""
+                required
+                readonly
+              />
+              <mat-error
+                *ngIf="
+                  f.personalemail.hasError('email') &&
+                  !f.personalemail.hasError('required')
+                "
+              >
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="f.personalemail.hasError('required')">
+                Email is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Reporting Manager"
+                formControlName="reportingmanager"
+                value=""
+                required
+                readonly
+              />
+              <mat-error *ngIf="f.reportingmanager.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Delivery Manager"
+                formControlName="reportinmanageremail"
+                value=""
+                readonly
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Mentor/Buddy"
+                formControlName="mentor"
+                value=""
+                readonly
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <input
+                  [max]="maxDate"
+                  matInput
+                  [matDatepicker]="careerStarting"
+                  formControlName="careerStartingDate"
+                  placeholder="Year of Career Started"
+                  required
+                  readonly
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="careerStarting"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #careerStarting></mat-datepicker>
+                <mat-error *ngIf="f.careerStartingDate.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-4 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <input
+                  [max]="maxDate"
+                  matInput
+                  [matDatepicker]="Joining"
+                  formControlName="JoiningDate"
+                  placeholder="Company Joining Date"
+                  required
+                  readonly
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="Joining"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #Joining></mat-datepicker>
+                <mat-error *ngIf="f.JoiningDate.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-4 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <input
+                  [max]="maxDate"
+                  matInput
+                  [matDatepicker]="pickere"
+                  formControlName="dob"
+                  placeholder="DOB"
+                  required
+                  readonly
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="pickere"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #pickere></mat-datepicker>
+                <mat-error *ngIf="f.dob.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Adhar Card"
+                formControlName="adhar"
+                value=""
+                required
+              />
+              <mat-error *ngIf="f.adhar.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="PAN Card"
+                formControlName="pan"
+                value=""
+                required
+                readonly
+              />
+              <mat-error *ngIf="f.pan.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Passport"
+                formControlName="passport"
+                value=""
+                readonly
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <mat-select
+                  placeholder=""
+                  formControlName="sex"
+                  placeholder="Sex"
+                  required
+                  readonly
+                >
+                  <mat-option value="Male">Male</mat-option>
+                  <mat-option value="Female">Female</mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.sex.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-2 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <mat-select
+                  placeholder=""
+                  formControlName="Marraige"
+                  placeholder="Married"
+                  required
+                  readonly
+                >
+                  <mat-option value="Yes">Yes</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.Marraige.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-2 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <mat-select
+                  placeholder="Blood Group"
+                  formControlName="Bloodgroup"
+                  required
+                  readonly
+                >
+                  <mat-option value="O+ve">O+ve</mat-option>
+                  <mat-option value="O-ve">O-ve</mat-option>
+                  <mat-option value="A+ve">A+ve</mat-option>
+                  <mat-option value="A-ve">A-ve</mat-option>
+                  <mat-option value="B+ve">B+ve</mat-option>
+                  <mat-option value="B-ve">B-ve</mat-option>
+                  <mat-option value="AB+ve">AB+ve</mat-option>
+                  <mat-option value="AB-ve">AB-ve</mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.Bloodgroup.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-2 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <mat-select
+                  placeholder="Extension"
+                  formControlName="extension"
+                  required
+                >
+                  <mat-option value="+91">+91</mat-option>
+                  <mat-option value="+1">+1</mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.extension.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Phone Number"
+                formControlName="phonenumber"
+                value=""
+                required
+                readonly
+              />
+              <mat-error *ngIf="f.phonenumber.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 pl-1">
+            <mat-form-field class="example-full-width">
+              <textarea
+                matInput
+                placeholder="Present Address"
+                formControlName="presentadd"
+                required
+                readonly
+              ></textarea>
+              <mat-error *ngIf="f.presentadd.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 pl-1">
+            <mat-form-field class="example-full-width">
+              <textarea
+                matInput
+                placeholder="Permenant Address"
+                formControlName="premenantadd"
+                required
+                readonly
+              ></textarea>
+              <mat-error *ngIf="f.premenantadd.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <br />
+      </mat-expansion-panel>
+      <br />
+      <!--
+        <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+          <mat-expansion-panel-header style="background-color: #314455">
+            <mat-panel-title
+              style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+            >
+              Project
+            </mat-panel-title>
+            <mat-panel-description> </mat-panel-description>
+          </mat-expansion-panel-header>
+          <br />
+          <div class="row" *ngFor="let field of fieldArray; let i = index">
+            <div class="column" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Client"
+                  [(ngModel)]="field.client"
+                  name="{{field.client}}"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="column" style="font-size: 8pt;padding-left: 10pt;">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Project Name"
+                  [(ngModel)]="field.project"
+                  name="{{field.project}}"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+
+            <div
+              class="column"
+              (click)="deleteprojectValue(i)"
+              style="font-size: 8pt;padding-left: 10pt;"
+            ></div>
+          </div>
+        </mat-expansion-panel>
+         <br />
+      -->
+
+      <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(2)">
+        <mat-expansion-panel-header style="background-color: #314455">
+          <mat-panel-title
+            style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+          >
+            Health Insurance
+          </mat-panel-title>
+          <mat-panel-description> </mat-panel-description>
+        </mat-expansion-panel-header>
+        <br />
+        <div class="row" *ngFor="let field of helathArray; let j = index">
+          <div class="col-md-3 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Nominee"
+                [(ngModel)]="field.nominee"
+                name="{{field.nominee}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Relation"
+                [(ngModel)]="field.relation"
+                name="{{field.nominee}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Age"
+                [(ngModel)]="field.age"
+                name="{{field.age}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <!--<input
+                matInput
+                placeholder="DOB"
+                [(ngModel)]="field.dob"
+                name="{{field.dob}}"
+                [ngModelOptions]="{ standalone: true }"
+              />-->
+              <input
+              [max]="maxDate"
+              matInput
+              [matDatepicker]="DOB"
+              [(ngModel)]="field.dob"
+              placeholder="Start Date"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startexp"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startexp></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Adharno"
+                [(ngModel)]="field.Adharno"
+                name="{{field.dob}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div
+            class="col-md-2 pl-1"
+            (click)="deletehealthValue(j)"
+            style="font-size: 8pt;padding-left: 10pt;"
+          ></div>
+        </div>
+      </mat-expansion-panel>
+      <br />
+    </mat-accordion>
+    <br />
+    <!--
+      <hr />
+      <br />
+      <button
+        mat-button
+        color="primary"
+        style="float: left; left: 350px"
+        class="no-hover-effect"
+        [disabled]="this.registerform.invalid"
+      >
+        Submit
+      </button>
+    -->
+  </form>
+  <br />
+</div>

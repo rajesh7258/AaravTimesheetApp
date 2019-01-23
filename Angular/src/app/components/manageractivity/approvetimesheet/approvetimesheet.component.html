@@ -1,0 +1,76 @@
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    fullScreenBackdrop: true,
+    backdropBorderRadius: '3px',
+    primaryColour: '#05386B',
+    secondaryColour: '#379683',
+    tertiaryColour: '#5CDB95'
+  }"
+  [template]="customLoadingTemplate"
+></ngx-loading>
+<mat-card class="example-card">
+  <div *ngIf="dontshowview">
+    <table class="table  table-hover table-sm">
+      <thead
+        class="thead-light"
+        style="font-size: 8px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+      >
+        <tr>
+          <th>Employeeid</th>
+          <th>Startdate</th>
+          <th>Enddate</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let field of approvetimesheet; let k = index">
+          <td>
+            <input
+              class="removeborderinput"
+              [(ngModel)]="field.employeeid"
+              name="{{ field.employeeid }}"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+          </td>
+          <td>
+            <input
+              matInput
+              class="removeborderinput"
+              [matDatepicker]="startdate"
+              [(ngModel)]="field.startdate"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+          </td>
+          <td>
+            <input
+              matInput
+              class="removeborderinput"
+              [matDatepicker]="enddate"
+              [(ngModel)]="field.enddate"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+          </td>
+          <td>
+            <button
+              mat-button
+              (click)="openviewmodal(k)"
+              class="removeborderinput"
+              color="primary"
+            >
+              View
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="!dontshowview">
+    <p style="left: 300px;position: relative;" class="removeborderinput">
+      No Timesheets to Approve
+    </p>
+  </div>
+</mat-card>

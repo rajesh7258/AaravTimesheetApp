@@ -1,0 +1,95 @@
+<app-header></app-header>
+<div style="color: #fff;background:	#3b444b;">
+  <div class="login-form">
+    <form method="post" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input
+          formControlName="email"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+          style="font-size: 11px"
+          type="text"
+          class="form-control"
+          name="username"
+          placeholder="Email"
+          required="required"
+        />
+        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+          <div
+            style="font-size: 10px; color: red; font-family: Verdana, Geneva, Tahoma, sans-serif"
+            *ngIf="f.email.errors.required"
+          >
+            Email is required
+          </div>
+          <div
+            style="font-size: 10px; color: red;font-family: Verdana, Geneva, Tahoma, sans-serif"
+            *ngIf="f.email.errors.email"
+          >
+            Email must be a valid email address
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input
+          type="password"
+          formControlName="password"
+          [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+          style="font-size: 11px"
+          type="password"
+          class="form-control"
+          name="password"
+          placeholder="Password"
+          required="required"
+        />
+        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+          <div
+            style="font-size: 10px; color: red;font-family: Verdana, Geneva, Tahoma, sans-serif"
+            *ngIf="f.password.errors.required"
+          >
+            Password is required
+          </div>
+          <div
+            style="font-size: 10px; color: red;font-family: Verdana, Geneva, Tahoma, sans-serif"
+            *ngIf="f.password.errors.minlength"
+          >
+            Password must be at least 6 characters
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg btn-block"
+          style="color: #fff;background:#0073b1;font-size: 12px"
+        >
+          Sign in
+        </button>
+      </div>
+      <div class="clearfix">
+        <!--
+          <label style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif" class="pull-left checkbox-inline"><input type="checkbox">admin</label>
+        -->
+
+        <a
+          href="resetlogin"
+          class="pull-right"
+          style="font-size: 11px;color:#7a7a7a;font-family: Verdana, Geneva, Tahoma, sans-serif;text-decoration: underline;"
+          >Forgot Password?</a
+        >
+      </div>
+    </form>
+  </div>
+  <ngx-spinner
+    [bdColor]="spinnerConfig.bdColor"
+    [size]="spinnerConfig.size"
+    [color]="spinnerConfig.color"
+  >
+    <p
+      style="font-size: 12px; color: white;font-family: Verdana, Geneva, Tahoma, sans-serif"
+    >
+      Loading...
+    </p>
+  </ngx-spinner>
+</div>
+<app-footer></app-footer>

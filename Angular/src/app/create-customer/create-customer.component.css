@@ -1,0 +1,106 @@
+mat-form-field {
+    width: 100%;
+    font-size: 12px
+}
+
+.container {
+    width: 170px;
+    height: 160px;
+    top:10px;
+    position: relative;
+    background-color: #acE7717D
+}
+
+/* resize images */
+.container img {
+    top: 16px;
+    left:18px;
+    width: 70%;
+    height: 130px;
+    position: relative;
+}
+
+.mat-button{
+    background-color:black;
+    color: #4caf50;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 10px
+}
+
+.mat-button.mat-accent[disabled], .mat-button.mat-primary[disabled], .mat-button.mat-warn[disabled], .mat-button[disabled][disabled], .mat-icon-button.mat-accent[disabled], .mat-icon-button.mat-primary[disabled], .mat-icon-button.mat-warn[disabled], .mat-icon-button[disabled][disabled], .mat-stroked-button.mat-accent[disabled], .mat-stroked-button.mat-primary[disabled], .mat-stroked-button.mat-warn[disabled], .mat-stroked-button[disabled][disabled]{
+    color:red
+}
+.mat-button.mat-primary .mat-button-focus-overlay {
+    background-color: #3f7f69;
+  }
+
+.progress-bar{
+    background-color: #3f7f69
+}
+
+.animated {
+    visibility: visible !important;
+}
+.hide-on-init {
+    visibility: hidden;
+}
+
+.glass{
+    overflow: hidden;
+    background: inherit;
+    left: 0;
+    right: 0;
+    top: 0; 
+    bottom: 0;
+    box-shadow: inset 0 0 0 3000px rgba(255,255,255,0.3);
+    
+}
+.glass::before{
+    content: “ ”;
+ background: inherit; 
+ position: absolute;
+ left: 0;
+ right: 0;
+ top: 0; 
+ bottom: 0;
+ box-shadow: inset 0 0 0 3000px rgba(233, 24, 24, 0.3);
+ 
+}
+
+/*upload Images*/
+
+
+.form-style-fake{position:absolute;top:0px;}
+.form-style-base{position:absolute;top:0px;z-index: 999;opacity: 0;}
+.imgCircle{border-radius: 50%;}
+.form-control{padding: 10px 50px;}
+.form-input{height:30px;border-radius: 0px;margin-top: 70px; width: 10px;background: #222}
+.Profile-input-file{
+    height:180px;width:180px;left:33%;
+    position: absolute;
+    top: 0px;
+    z-index: 999;
+    opacity: 0 !important;
+}
+
+.mg-auto{
+    margin:0 auto;max-width: 200px;overflow: hidden;
+}
+.fake-styled-btn{
+    background: #006cad;
+    padding: 10px;
+    color: #fff;
+}
+.input-place{
+    position: absolute;top:75px;left: 30px;font-size:20px;color:#14A76C;}
+.margin{margin-top:10px;margin-bottom:10px;}
+
+.example-option-img {
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+  
+  [dir='rtl'] .example-option-img {
+    margin-right: 0;
+    margin-left: 5px;
+  }

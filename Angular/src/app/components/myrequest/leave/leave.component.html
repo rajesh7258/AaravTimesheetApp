@@ -1,0 +1,181 @@
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    fullScreenBackdrop: true,
+    backdropBorderRadius: '3px',
+    primaryColour: '#05386B',
+    secondaryColour: '#379683',
+    tertiaryColour: '#5CDB95'
+  }"
+  [template]="customLoadingTemplate"
+></ngx-loading>
+<mat-card style="width:250px">
+  <table border="1" class="table-hover table-sm">
+    <thead
+      class="thead-light"
+      style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+    >
+      <tr>
+        <th width="250px">Type</th>
+        <th width="100px">Balance</th>
+      </tr>
+    </thead>
+    <tbody
+      style="font-size: 10px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+    >
+      <tr>
+        <td>Earned Leave</td>
+        <td>{{ earnedleaves }}</td>
+      </tr>
+      <tr>
+        <td>Casual Leave</td>
+        <td>{{ casualleaves }}</td>
+      </tr>
+      <tr>
+        <td>Optional Holiday</td>
+        <td>{{ optionalholidays }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br />
+  <button
+    mat-button
+    (click)="applyleave()"
+    style="left:30px;position: relative; background-color: #009688!important;color:white;font-size:10px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+  >
+    Apply Leave
+  </button>
+</mat-card>
+<br />
+<mat-card>
+  <div class="row">
+    <p
+      style="position: relative; font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif;left: 18px;"
+    >
+      <b>Leave Summary</b>
+    </p>
+  </div>
+
+  <table border="1" class="table-hover table-sm">
+    <thead
+      class="thead-light"
+      style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif;text-align:center"
+    >
+      <tr>
+        <th width="75px">From Date</th>
+        <th width="70px">To Date</th>
+        <th width="50px">Days</th>
+        <th width="100px">Type</th>
+        <th width="80px">Applied To</th>
+        <th width="75px">Status</th>
+        <th width="75px">Applied on</th>
+        <th width="100px">Action</th>
+        <th width="100px">Reason For Reject</th>
+      </tr>
+    </thead>
+    <tbody
+      style="font-size: 10px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+    >
+      <tr *ngFor="let field of appliedleaves; let j = index">
+        <td>
+          <input
+            matInput
+            class="removeborderinput"
+            [matDatepicker]="fromdate"
+            [(ngModel)]="field.fromdate"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </td>
+        <td>
+          <input
+            matInput
+            class="removeborderinput"
+            [matDatepicker]="todate"
+            [(ngModel)]="field.todate"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </td>
+        <td>
+          <input
+            matInput
+            class="removeborderinput"
+            [(ngModel)]="field.days"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </td>
+        <td>
+          <input
+            matInput
+            class="removeborderinput"
+            [(ngModel)]="field.type"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </td>
+        <td>
+          <input
+            matInput
+            class="removeborderinput"
+            [(ngModel)]="field.appliedto"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </td>
+        <td>
+          <input
+            matInput
+            class="removeborderinput"
+            [(ngModel)]="field.status"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </td>
+        <td>
+          <input
+            matInput
+            class="removeborderinput"
+            [matDatepicker]="fromdates"
+            [(ngModel)]="field.appliedon"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </td>
+        <td>
+          <div *ngIf="field.status !== 'Approved'">
+            <button
+              mat-button
+              color="primary"
+              style="background-color: #009688!important;color:white;font-size:8px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+              class="no-hover-effect"
+              (click)="oncancelrequest(j)"
+            >
+              Cancel Request
+            </button>
+          </div>
+          <div *ngIf="field.status === 'Approved'">
+            <input class="removeborderinput" value="-NA-" readonly />
+          </div>
+        </td>
+        <td>
+          <div *ngIf="field.status !== 'Rejected'">
+            <input class="removeborderinput" value="-NA-" readonly />
+          </div>
+          <div *ngIf="field.status === 'Rejected'">
+            <button
+              mat-button
+              color="primary"
+              style="background-color: #009688!important;color:white;font-size:8px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+              class="no-hover-effect"
+              (click)="showrejectdescription(j)"
+            >
+              Click to view
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</mat-card>

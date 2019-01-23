@@ -1,0 +1,169 @@
+<mat-card class="example-card">
+  <ngx-loading
+    [show]="loading"
+    [config]="{
+      fullScreenBackdrop: true,
+      backdropBorderRadius: '3px',
+      primaryColour: '#05386B',
+      secondaryColour: '#379683',
+      tertiaryColour: '#5CDB95'
+    }"
+    [template]="customLoadingTemplate"
+  ></ngx-loading>
+  <form [formGroup]="createproject">
+    <div
+      class="row"
+      style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif"
+    >
+      <div class="col-md-3 pl-1">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Projectname"
+            formControlName="projectname"
+            value=""
+            required
+          />
+          <mat-error *ngIf="f.projectname.hasError('required')">
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf="!isnewclient">
+      <div
+        class="row"
+        style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif"
+      >
+        <div class="col-md-3 pl-1">
+          <mat-form-field class="example-full-width">
+            <mat-select placeholder="Client" formControlName="client" required>
+              <mat-option
+                *ngFor="let client of clientlist"
+                [value]="client.name"
+              >
+                {{ client.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.client.hasError('required')">
+              <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 pl-1">
+        <mat-checkbox
+          style="font-size: 10px;color: #3f7f69;font-family: Verdana, Geneva, Tahoma, sans-serif"
+          class="example-margin"
+          formControlName="createclient"
+          (change)="newclinet($event)"
+          >If client is not in list check the box to add client</mat-checkbox
+        >
+      </div>
+    </div>
+    <div *ngIf="isnewclient">
+      <div
+        class="row"
+        style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif"
+      >
+        <div class="col-md-3 pl-1">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Enter New Client Name"
+              formControlName="client"
+              value=""
+              required
+            />
+            <mat-error *ngIf="f.client.hasError('required')">
+              <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="row"
+      style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+    >
+      <div class="col-lg-6 pl-1">
+        <mat-form-field style="width: 350px;" class="example-full-width">
+          <textarea
+            matInput
+            placeholder="Description"
+            formControlName="description"
+            required
+          ></textarea>
+          <mat-error *ngIf="f.description.hasError('required')">
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div
+      class="row"
+      style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+    >
+      <div class="col-md-4 pl-1">
+        <div class="form-group">
+          <mat-form-field>
+            <input
+              [max]="maxDate"
+              matInput
+              [matDatepicker]="startdate"
+              formControlName="estimatedstartdate"
+              placeholder="Estimated Start Date"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startdate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startdate></mat-datepicker>
+            <mat-error *ngIf="f.estimatedstartdate.hasError('required')">
+              <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-md-4 pl-1">
+        <div class="form-group">
+          <mat-form-field>
+            <input
+              [max]="maxDate"
+              matInput
+              [matDatepicker]="enddate"
+              formControlName="estimatedenddate"
+              placeholder="Estimated End Date"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="enddate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #enddate></mat-datepicker>
+            <mat-error *ngIf="f.estimatedenddate.hasError('required')">
+              <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <br />
+    <button
+      mat-button
+      color="primary"
+      style="float: left;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      class="no-hover-effect"
+      [disabled]="this.createproject.invalid"
+      (click)="onSubmit()"
+    >
+      Create Project
+    </button>
+    <br />
+  </form>
+</mat-card>
