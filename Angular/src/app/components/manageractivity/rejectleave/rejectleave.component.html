@@ -1,0 +1,31 @@
+<div class="row">
+  <mat-form-field style=" width:800px;position: relative;">
+    <input
+      matInput
+      placeholder="Reject Description"
+      [formControl]="description"
+      name="newAttributeProject"
+    />
+  </mat-form-field>
+</div>
+<div class="row" style="position: relative;">
+  <button
+    mat-button
+    color="primary"
+    style="background-color: #009688!important;color:white;font-size:8px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+    class="no-hover-effect"
+    (click)="onreject(j)"
+  >
+    Reject
+  </button>
+  &nbsp;
+  <button
+    mat-button
+    color="primary"
+    style="background-color: #009688!important;color:white;font-size:8px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+    class="no-hover-effect"
+    (click)="closeModal('Close')"
+  >
+    close
+  </button>
+</div>

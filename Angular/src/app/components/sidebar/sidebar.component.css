@@ -1,0 +1,19 @@
+img.two {
+    height: 25%;
+    width: 50%;
+}
+
+.sidebar-wrapper {
+    background-color: #222;
+}
+
+.sidebar .nav li > a, .off-canvas-sidebar .nav li > a{
+    font-size:10px
+}
+
+.nav li.active > a {
+    background-color: #e8554e;
+    border-radius: 0px;
+    
+}
+

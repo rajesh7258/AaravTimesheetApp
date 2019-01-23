@@ -1,0 +1,153 @@
+<br />
+<br />
+<br />
+<div class="main-content">
+  <ngx-loading
+    [show]="loading"
+    [config]="{
+      fullScreenBackdrop: true,
+      backdropBorderRadius: '3px',
+      primaryColour: '#05386B',
+      secondaryColour: '#379683',
+      tertiaryColour: '#5CDB95'
+    }"
+    [template]="customLoadingTemplate"
+  ></ngx-loading>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+      <mat-expansion-panel-header style="background-color: #314455;">
+        <mat-panel-title
+          style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+        >
+          India
+        </mat-panel-title>
+        <mat-panel-description> </mat-panel-description>
+      </mat-expansion-panel-header>
+      <br />
+      <table class="table  table-hover table-sm">
+        <thead
+          class="thead-light"
+          style="font-size: 9px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+        >
+          <tr>
+            <th>Month</th>
+            <th>Date</th>
+            <th>Day</th>
+            <th>Occasion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let field of India; let k = index">
+            <td>
+              <input
+                class="removeborderinput"
+                [(ngModel)]="field.month"
+                name="{{field.occasion}}"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+            </td>
+            <td>
+              <input
+                matInput
+                class="removeborderinput"
+                [matDatepicker]="dates"
+                [(ngModel)]="field.date"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+            </td>
+            <td>
+              <input
+                class="removeborderinput"
+                matInput
+                [(ngModel)]="field.day"
+                name="{{field.day}}"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+            </td>
+            <td>
+              <input
+                class="removeborderinput"
+                matInput
+                [(ngModel)]="field.occasion"
+                name="{{field.occasion}}"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-expansion-panel>
+    <br />
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(0)">
+      <mat-expansion-panel-header style="background-color: #314455;">
+        <mat-panel-title
+          style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+        >
+          USA
+        </mat-panel-title>
+        <mat-panel-description> </mat-panel-description>
+      </mat-expansion-panel-header>
+      <br />
+      <table class="table  table-hover table-sm">
+        <thead
+          class="thead-light"
+          style="font-size: 9px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+        >
+          <tr>
+            <th>Month</th>
+            <th>Date</th>
+            <th>Day</th>
+            <th>Occasion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let field of USA; let k = index">
+            <td>
+              <input
+                class="removeborderinput"
+                [(ngModel)]="field.month"
+                name="{{field.occasion}}"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+            </td>
+            <td>
+              <input
+                matInput
+                class="removeborderinput"
+                [matDatepicker]="dates"
+                [(ngModel)]="field.date"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+            </td>
+            <td>
+              <input
+                class="removeborderinput"
+                matInput
+                [(ngModel)]="field.day"
+                name="{{field.day}}"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+            </td>
+            <td>
+              <input
+                class="removeborderinput"
+                matInput
+                [(ngModel)]="field.occasion"
+                name="{{field.occasion}}"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

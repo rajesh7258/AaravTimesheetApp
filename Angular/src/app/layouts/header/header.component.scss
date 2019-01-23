@@ -1,0 +1,21 @@
+.example-icon {
+    padding: 0 14px;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100% !important;
+    background-color: rgba(0,0,0, 0.8);
+}
+
+.fix-imagesize {
+    width: 200px;
+    height: 50px;
+}

@@ -1,0 +1,36 @@
+* {
+    box-sizing:border-box;
+}
+*:before, 
+*:after {
+    box-sizing:border-box;
+}
+
+input{
+    width:100%;
+}
+
+.table-format{
+    font-size: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+.custom-rowformat{
+    width: 50px
+}
+
+.columnsformat{
+font-weight: bold
+}
+
+.removeinputborder{
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid black;
+}
+
+.removeinputborders{
+    border: none;
+    border-color: transparent;
+}

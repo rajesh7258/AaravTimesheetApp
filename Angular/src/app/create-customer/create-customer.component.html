@@ -1,0 +1,1166 @@
+<br />
+<br />
+<div class="main-content">
+  <ngx-loading
+    [show]="loading"
+    [config]="{
+      fullScreenBackdrop: true,
+      backdropBorderRadius: '3px',
+      primaryColour: '#05386B',
+      secondaryColour: '#379683',
+      tertiaryColour: '#5CDB95'
+    }"
+    [template]="customLoadingTemplate"
+  ></ngx-loading>
+  <br />
+  <div *ngIf="currentFileUpload" class="progress" style="height:15px">
+    <div
+      class="progress-bar progress-bar-info "
+      role="progressbar"
+      attr.aria-valuenow="{{progress.percentage}}"
+      aria-valuemin="0"
+      aria-valuemax="120"
+      [ngStyle]="{ width: progress.percentage + '%' }"
+    >
+      {{ progress.percentage }}%
+    </div>
+  </div>
+  <div class="row" class="glass">
+    <div class="col-md-3 pl-1">
+      <div class="container"><img class="imgclass" [src]="imagepath" /></div>
+      <br />
+    </div>
+    <div class="col-md-2 pl-1">
+      <br />
+      <br />
+      <div class="row">
+        <input
+          type="file"
+          id="base-input"
+          (change)="selectFile($event)"
+          class="form-control form-input form-style-base"
+        />
+        <input
+          type="text"
+          id="fake-input"
+          class="form-control form-input form-style-fake"
+          readonly
+        />
+        <span class="glyphicon glyphicon-open input-place"></span>
+      </div>
+      <br />
+    </div>
+  </div>
+  <hr />
+  <br />
+  <form [formGroup]="registerform" (ngSubmit)="onSubmit()">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+        <mat-expansion-panel-header style="background-color: #314455;">
+          <mat-panel-title
+            style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+          >
+            Primary
+          </mat-panel-title>
+          <mat-panel-description> </mat-panel-description>
+        </mat-expansion-panel-header>
+        <br />
+        <div class="row">
+          <div class="col-md-2 pl-1">
+            <mat-checkbox
+              style="font-size: 10px;color: #3f7f69;font-family: Verdana, Geneva, Tahoma, sans-serif"
+              class="example-margin"
+              formControlName="adminaccess"
+              >Admin Access</mat-checkbox
+            >
+          </div>
+          <div class="col-md-2 pl-1">
+            <mat-checkbox
+              style="font-size: 10px;color: #3f7f69;font-family: Verdana, Geneva, Tahoma, sans-serif"
+              class="example-margin"
+              formControlName="manager"
+              >Manager</mat-checkbox
+            >
+          </div>
+          <div class="col-md-2 pl-1">
+            <mat-checkbox
+              style="font-size: 10px;color: #3f7f69;font-family: Verdana, Geneva, Tahoma, sans-serif"
+              class="example-margin"
+              formControlName="itadmin"
+              >IT Admin</mat-checkbox
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 pl-1">
+            <!--
+              <div class="form-group">
+                <label style="color:black">Employee ID</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Eg.AS028"
+                />
+              </div>
+            -->
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="EmployeeID"
+                formControlName="Employeeid"
+                value=""
+                required
+              />
+              <mat-error *ngIf="f.Employeeid.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="First Name"
+                formControlName="firstname"
+                value=""
+                required
+              />
+              <mat-error *ngIf="f.firstname.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Middle Name"
+                formControlName="middlename"
+                value=""
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Last Name"
+                formControlName="lastname"
+                value=""
+                required
+              />
+              <mat-error *ngIf="f.lastname.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <!--
+                <input
+                  matInput
+                  placeholder="EmployeeType"
+                  formControlName="employeetype"
+                  value=""
+                  required
+                />
+              -->
+
+              <mat-select
+                placeholder="EmployeeType"
+                formControlName="employeetype"
+                required
+              >
+                <mat-option value="Regular">Regular</mat-option>
+                <mat-option value="Contractor">Contractor</mat-option>
+              </mat-select>
+              <mat-error *ngIf="f.sex.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <!--
+                <input
+                  matInput
+                  placeholder="Department"
+                  formControlName="department"
+                  value=""
+                  required
+                />
+              -->
+              <mat-select
+                placeholder="Department"
+                formControlName="department"
+                required
+              >
+                <mat-option value="Engineering">Engineering</mat-option>
+                <mat-option value="HR">HR</mat-option>
+                <mat-option value="Finance">Finance</mat-option>
+                <mat-option value="IT Admin">IT Admin</mat-option>
+              </mat-select>
+              <mat-error *ngIf="f.sex.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="f.department.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Desigination"
+                formControlName="desigination"
+                value=""
+                required
+              />
+              <mat-error *ngIf="f.desigination.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Practice"
+                formControlName="practice"
+                value=""
+                required
+              />
+              <mat-error *ngIf="f.practice.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Office Email"
+                formControlName="officeemail"
+                value=""
+                required
+              />
+              <mat-error
+                *ngIf="
+                  f.officeemail.hasError('email') &&
+                  !f.officeemail.hasError('required')
+                "
+              >
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="f.officeemail.hasError('required')">
+                Email is <strong>required</strong>
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  f.officeemail.hasError('pattern') &&
+                  !f.officeemail.hasError('required')
+                "
+              >
+                Please enter a valid email address(not a proper domain it has to
+                @aaravsolutions.com)
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Personal Email"
+                formControlName="personalemail"
+                value=""
+                required
+              />
+              <mat-error
+                *ngIf="
+                  f.personalemail.hasError('email') &&
+                  !f.personalemail.hasError('required')
+                "
+              >
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="f.personalemail.hasError('required')">
+                Email is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <mat-select
+                placeholder="Reporting Manager"
+                formControlName="reportingmanager"
+                (selectionChange)="onmanagerselect($event.value)"
+                required
+              >
+                <mat-option
+                  *ngFor="let manager of managerlist"
+                  [value]="manager.name"
+                >
+                  {{ manager.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="f.reportingmanager.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Reporting Manager email"
+                formControlName="reportinmanageremail"
+                value=""
+                readonly
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <input
+                  [max]="maxDate"
+                  matInput
+                  [matDatepicker]="pickere"
+                  formControlName="dob"
+                  placeholder="DOB"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="pickere"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #pickere></mat-datepicker>
+                <mat-error *ngIf="f.dob.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <!--
+          <div class="row">
+            <div class="col-md-4 pl-1">
+              <div class="form-group">
+                <mat-form-field>
+                  <input
+                    [max]="maxDate"
+                    matInput
+                    [matDatepicker]="careerStarting"
+                    formControlName="careerStartingDate"
+                    placeholder="Year of Career Started"
+                    required
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="careerStarting"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #careerStarting></mat-datepicker>
+                  <mat-error *ngIf="f.careerStartingDate.hasError('required')">
+                    <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-4 pl-1">
+              <div class="form-group">
+                <mat-form-field>
+                  <input
+                    [max]="maxDate"
+                    matInput
+                    [matDatepicker]="Joining"
+                    formControlName="JoiningDate"
+                    placeholder="Company Joining Date"
+                    required
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="Joining"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #Joining></mat-datepicker>
+                  <mat-error *ngIf="f.JoiningDate.hasError('required')">
+                    <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-4 pl-1">
+              <div class="form-group">
+                <mat-form-field>
+                  <input
+                    [max]="maxDate"
+                    matInput
+                    [matDatepicker]="pickere"
+                    formControlName="dob"
+                    placeholder="DOB"
+                    required
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="pickere"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #pickere></mat-datepicker>
+                  <mat-error *ngIf="f.dob.hasError('required')">
+                    <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        -->
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Adhar Card"
+                formControlName="adhar"
+                value=""
+                required
+              />
+              <mat-error *ngIf="f.adhar.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="PAN Card"
+                formControlName="pan"
+                value=""
+                required
+              />
+              <mat-error *ngIf="f.pan.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Passport"
+                formControlName="passport"
+                value=""
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <mat-select
+                  placeholder=""
+                  formControlName="sex"
+                  placeholder="Sex"
+                  required
+                >
+                  <mat-option value="Male">Male</mat-option>
+                  <mat-option value="Female">Female</mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.sex.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-2 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <mat-select
+                  placeholder=""
+                  formControlName="Marraige"
+                  placeholder="Married"
+                  required
+                >
+                  <mat-option value="Yes">Yes</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.Marraige.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-2 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <mat-select
+                  placeholder="Blood Group"
+                  formControlName="Bloodgroup"
+                  required
+                >
+                  <mat-option value="O+ve">O+ve</mat-option>
+                  <mat-option value="O-ve">O-ve</mat-option>
+                  <mat-option value="A+ve">A+ve</mat-option>
+                  <mat-option value="A-ve">A-ve</mat-option>
+                  <mat-option value="B+ve">B+ve</mat-option>
+                  <mat-option value="B-ve">B-ve</mat-option>
+                  <mat-option value="AB+ve">AB+ve</mat-option>
+                  <mat-option value="AB-ve">AB-ve</mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.Bloodgroup.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-2 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <mat-select
+                  placeholder="Extension"
+                  formControlName="extension"
+                  required
+                >
+                  <mat-option value="+91">
+                    <img
+                      class="example-option-img"
+                      aria-hidden
+                      src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/800px-Flag_of_India.svg.png"
+                      height="20"
+                      width="24"
+                    />
+                    +91
+                  </mat-option>
+                  <mat-option value="+1">
+                    <img
+                      class="example-option-img"
+                      aria-hidden
+                      src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/800px-Flag_of_the_United_States.svg.png"
+                      height="20"
+                      width="24"
+                    />
+                    +1
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.extension.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Phone Number"
+                formControlName="phonenumber"
+                value=""
+                required
+              />
+              <mat-error *ngIf="f.phonenumber.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  f.phonenumber.hasError('pattern') &&
+                  !f.phonenumber.hasError('required')
+                "
+              >
+                Please enter a valid phone number
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  f.phonenumber.hasError('maxlength') &&
+                  !f.phonenumber.hasError('required')
+                "
+              >
+                Please enter a valid phone number
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 pl-1">
+            <mat-form-field class="example-full-width">
+              <textarea
+                matInput
+                placeholder="Present Address"
+                formControlName="presentadd"
+                required
+              ></textarea>
+              <mat-error *ngIf="f.presentadd.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6 pl-1">
+            <mat-form-field class="example-full-width">
+              <textarea
+                matInput
+                placeholder="Permenant Address"
+                formControlName="premenantadd"
+                required
+              ></textarea>
+              <mat-error *ngIf="f.premenantadd.hasError('required')">
+                <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <br />
+      </mat-expansion-panel>
+
+      <!--
+        <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+          <mat-expansion-panel-header style="background-color: #314455">
+            <mat-panel-title
+              style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+            >
+              Project
+            </mat-panel-title>
+            <mat-panel-description> </mat-panel-description>
+          </mat-expansion-panel-header>
+          <br />
+          <div class="row" *ngFor="let field of fieldArray; let i = index">
+            <div class="column" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Client"
+                  [(ngModel)]="field.client"
+                  name="{{field.client}}"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="column" style="font-size: 8pt;padding-left: 10pt;">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Project Name"
+                  [(ngModel)]="field.project"
+                  name="{{field.project}}"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+
+            <div
+              class="column"
+              (click)="deleteprojectValue(i)"
+              style="font-size: 8pt;padding-left: 10pt;"
+            >
+              <button
+                type="button"
+                style="background-color:transparent;border: none;padding: 0;"
+              >
+                <i style="color: red" class="material-icons"> delete </i>
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="column" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Client"
+                  [(ngModel)]="newAttribute.client"
+                  name="newAttributeClient"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="column" style="font-size: 8pt;padding-left: 10pt;">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Project Name"
+                  [(ngModel)]="newAttribute.project"
+                  name="newAttributeProject"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="column" style="font-size: 8pt;padding-left: 10pt;">
+              <button
+                type="button"
+                (click)="addprojectValue()"
+                style="background-color:transparent;border: none;padding: 0;"
+              >
+                <i style="color: green" class="material-icons">
+                  add_circle_outline
+                </i>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      -->
+      <br />
+      <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+        <mat-expansion-panel-header style="background-color: #314455">
+          <mat-panel-title
+            style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+          >
+            Health Insurance
+          </mat-panel-title>
+          <mat-panel-description> </mat-panel-description>
+        </mat-expansion-panel-header>
+        <br />
+        <div class="row" *ngFor="let field of helathArray; let j = index">
+          <div class="col-md-3 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Nominee"
+                [(ngModel)]="field.nominee"
+                name="{{field.nominee}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Relation"
+                [(ngModel)]="field.relation"
+                name="{{field.nominee}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Age"
+                [(ngModel)]="field.age"
+                name="{{field.age}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="DOB"
+                [(ngModel)]="field.dob"
+                name="{{field.dob}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Adharno"
+                [(ngModel)]="field.Adharno"
+                name="{{field.dob}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div
+            class="col-md-2 pl-1"
+            (click)="deletehealthValue(j)"
+            style="font-size: 8pt;padding-left: 10pt;"
+          >
+            <button
+              type="button"
+              style="background-color:transparent;border: none;padding: 0;"
+            >
+              <i style="color: red" class="material-icons"> delete </i>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Nominee"
+                [(ngModel)]="healthAttribute.nominee"
+                name="newAttributeClient"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <!--
+                <input
+                  matInput
+                  placeholder="Relation"
+                  [(ngModel)]="healthAttribute.relation"
+                  name="newAttributeProject"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              -->
+              <mat-select
+                placeholder="Relation"
+                [(ngModel)]="healthAttribute.relation"
+                name="{{healthAttribute.relation}}"
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <mat-option value="Self">Self</mat-option>
+                <mat-option value="Wife">Wife</mat-option>
+                <mat-option value="Father">Father</mat-option>
+                <mat-option value="Mother">Mother</mat-option>
+                <mat-option value="Child1">Child1</mat-option>
+                <mat-option value="Child2">Child2</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <!--
+                <input
+                  matInput
+                  placeholder="DOB"
+                  [(ngModel)]="healthAttribute.dob"
+                  name="newAttributeProject"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              -->
+              <input
+                [max]="maxDate"
+                matInput
+                [matDatepicker]="dobhelath"
+                [(ngModel)]="healthAttribute.dob"
+                placeholder="DOB"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+                (dateInput)="calculateage($event)"
+                (dateChange)="calculateage($event)"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="dobhelath"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #dobhelath></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Age"
+                [(ngModel)]="healthAttribute.age"
+                name="newAttributeProject"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Adharno"
+                [(ngModel)]="healthAttribute.Adharno"
+                name="newAttributeProject"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <button
+              type="button"
+              (click)="addhealthValue()"
+              style="background-color:transparent;border: none;padding: 0;"
+            >
+              <i style="color: green" class="material-icons">
+                add_circle_outline
+              </i>
+            </button>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <br />
+      <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
+        <mat-expansion-panel-header style="background-color: #314455">
+          <mat-panel-title
+            style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+          >
+            Work Expreince
+          </mat-panel-title>
+          <mat-panel-description> </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="row">
+          <div class="col-md-2 pl-1">
+            <mat-checkbox
+              style="font-size: 10px;color: #3f7f69;font-family: Verdana, Geneva, Tahoma, sans-serif"
+              class="example-margin"
+              formControlName="fresher"
+              (change)="fresherornot($event)"
+              >Fresher</mat-checkbox
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <input
+                  [max]="maxDate"
+                  matInput
+                  [matDatepicker]="careerStarting"
+                  formControlName="careerStartingDate"
+                  placeholder="Year of Career Started"
+                  required
+                  (dateInput)="calculateExp($event)"
+                  (dateChange)="calculateExp($event)"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="careerStarting"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #careerStarting></mat-datepicker>
+                <mat-error *ngIf="f.careerStartingDate.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-4 pl-1">
+            <div class="form-group">
+              <mat-form-field>
+                <input
+                  [max]="maxDate"
+                  matInput
+                  [matDatepicker]="Joining"
+                  formControlName="JoiningDate"
+                  placeholder="Company Joining Date"
+                  required
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="Joining"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #Joining></mat-datepicker>
+                <mat-error *ngIf="f.JoiningDate.hasError('required')">
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-4 pl-1">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Total Experince"
+                formControlName="totalexperince"
+                value=""
+                readonly
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div *ngIf="!isfresher">
+          <div
+            class="row"
+            *ngFor="let field of previousexperince; let k = index"
+          >
+            <div class="col-md-3 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Companyname"
+                  [(ngModel)]="field.companyname"
+                  name="{{field.companyname}}"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Designation"
+                  [(ngModel)]="field.desigination"
+                  name="{{field.desigination}}"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Start date"
+                  [(ngModel)]="field.startdate"
+                  name="{{field.startdate}}"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="End date"
+                  [(ngModel)]="field.enddate"
+                  name="{{field.enddate}}"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-md-3 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Total Expreince"
+                  [(ngModel)]="field.totalexperince"
+                  name="{{field.totalexperince}}"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div
+              class="col-md-2 pl-1"
+              (click)="deleteexperinceValue(k)"
+              style="font-size: 8pt;padding-left: 10pt;"
+            >
+              <button
+                type="button"
+                style="background-color:transparent;border: none;padding: 0;"
+              >
+                <i style="color: red" class="material-icons"> delete </i>
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Companyname"
+                  [(ngModel)]="experinceAttribute.companyname"
+                  name="newAttributeClient"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Designation"
+                  [(ngModel)]="experinceAttribute.desigination"
+                  name="newAttributeProject"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <!--
+                  <input
+                    matInput
+                    placeholder="DOB"
+                    [(ngModel)]="healthAttribute.dob"
+                    name="newAttributeProject"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                -->
+                <input
+                  [max]="maxDate"
+                  matInput
+                  [matDatepicker]="startexp"
+                  [(ngModel)]="experinceAttribute.startdate"
+                  placeholder="Start Date"
+                  [ngModelOptions]="{ standalone: true }"
+                  readonly
+                  (dateInput)="expreincetotalexp($event)"
+                  (dateChange)="expreincetotalexp($event)"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="startexp"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #startexp></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <!--
+                  <input
+                    matInput
+                    placeholder="DOB"
+                    [(ngModel)]="healthAttribute.dob"
+                    name="newAttributeProject"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                -->
+                <input
+                  [max]="maxDate"
+                  matInput
+                  [matDatepicker]="endexp"
+                  [(ngModel)]="experinceAttribute.enddate"
+                  placeholder="End Date"
+                  [ngModelOptions]="{ standalone: true }"
+                  readonly
+                  (dateInput)="expreincetotalexp($event)"
+                  (dateChange)="expreincetotalexp($event)"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="endexp"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #endexp></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-3 pl-1" style="font-size: 8pt">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  placeholder="Total Experince"
+                  [(ngModel)]="experinceAttribute.totalexperince"
+                  name="newAttributeProject"
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </mat-form-field>
+            </div>
+            <div class="col-md-2 pl-1" style="font-size: 8pt">
+              <button
+                type="button"
+                (click)="addexperinceValue()"
+                style="background-color:transparent;border: none;padding: 0;"
+              >
+                <i style="color: green" class="material-icons">
+                  add_circle_outline
+                </i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <br />
+    <hr />
+    <br />
+    <button
+      mat-button
+      color="primary"
+      style="float: left; left: 350px"
+      class="no-hover-effect"
+      [disabled]="this.registerform.invalid"
+    >
+      Submit
+    </button>
+  </form>
+  <br />
+</div>

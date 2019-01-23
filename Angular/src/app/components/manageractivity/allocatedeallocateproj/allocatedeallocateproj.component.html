@@ -1,0 +1,195 @@
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    fullScreenBackdrop: true,
+    backdropBorderRadius: '3px',
+    primaryColour: '#05386B',
+    secondaryColour: '#379683',
+    tertiaryColour: '#5CDB95'
+  }"
+  [template]="customLoadingTemplate"
+></ngx-loading>
+<mat-card class="example-card">
+  <div
+    class="row"
+    style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif"
+  >
+    <div class="row">
+      <mat-form-field
+        style="left:30px;font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-select
+          (selectionChange)="changeemployeeview($event)"
+          placeholder="Employeeid"
+          [formControl]="employeeid"
+          required
+        >
+          <mat-option
+            *ngFor="let employee of employeelist"
+            [value]="employee.username"
+          >
+            {{ employee.employeeid }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div
+    *ngIf="employeefound"
+    style="font-size: 10px;font-family: Verdana, Geneva, Tahoma, sans-serif;left:15px;position: relative;"
+  >
+    <br />
+    <div class="row"><b>Employeeid :</b> &nbsp;{{ this.employeeid }}</div>
+    <div class="row"><b>Name :</b> &nbsp;{{ this.name }}</div>
+    <div class="row"><b>Email :</b> &nbsp;{{ this.emailaddress }}</div>
+  </div>
+  <br />
+  <div *ngIf="employeefound">
+    <div
+      class="row"
+      *ngFor="let field of projectlist; let k = index"
+      style="font-size: 10px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+    >
+      <div class="col-md-2" style="font-size: 8pt">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Client"
+            [(ngModel)]="field.clientname"
+            name="{{field.clientname}}"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </mat-form-field>
+      </div>
+      <div class="col-md-2" style="font-size: 8pt">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Projectname"
+            [(ngModel)]="field.projectname"
+            name="{{field.projectname}}"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </mat-form-field>
+      </div>
+      <div class="col-md-2 ">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            [matDatepicker]="startest"
+            [(ngModel)]="field.eststartdate"
+            placeholder="Estimated Start Date"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </mat-form-field>
+      </div>
+      <div class="col-md-2 ">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            [matDatepicker]="endest"
+            [(ngModel)]="field.estenddate"
+            placeholder="Estimated End Date"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </mat-form-field>
+      </div>
+      <div class="col-md-3 " (click)="deleteprojectValue(k)">
+        <button
+          type="button"
+          style="background-color:transparent;border: none;padding: 0;"
+        >
+          <i style="color: red" class="material-icons"> delete </i>
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="row"
+      style="font-size: 10px;font-family: Verdana, Geneva, Tahoma, sans-serif;"
+    >
+      <div class="col-md-2 ">
+        <mat-form-field class="example-full-width">
+          <mat-select
+            placeholder="Client"
+            (selectionChange)="changeprojectview($event)"
+            [(ngModel)]="projectattribute.clientname"
+          >
+            <mat-option *ngFor="let client of clientlist" [value]="client.name">
+              {{ client.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-2 ">
+        <mat-form-field class="example-full-width">
+          <mat-select
+            placeholder="Project"
+            [(ngModel)]="projectattribute.projectname"
+          >
+            <mat-option
+              *ngFor="let project of dropdownprojectlist"
+              [value]="project.name"
+            >
+              {{ project.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-2 ">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            [matDatepicker]="startexp"
+            [(ngModel)]="projectattribute.eststartdate"
+            placeholder="Estimated Start Date"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="startexp"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #startexp></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-md-2 ">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            [matDatepicker]="enddate"
+            [(ngModel)]="projectattribute.estenddate"
+            placeholder="Estimated End Date"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="enddate"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #enddate></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3" style="font-size: 10pt" (click)="assignproject()">
+        <button
+          type="button"
+          style="background-color:transparent;border: none;padding: 0;"
+        >
+          <i style="color: green" class="material-icons">
+            add_circle_outline
+          </i>
+        </button>
+      </div>
+    </div>
+    <br />
+    <button
+      mat-button
+      color="primary"
+      style="float: left; left: 0px;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      class="no-hover-effect"
+      [disabled]="!submitbutton"
+      (click)="onSave()"
+    >
+      Save
+    </button>
+  </div>
+  <br />
+</mat-card>

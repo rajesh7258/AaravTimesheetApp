@@ -1,0 +1,115 @@
+<br />
+<br />
+<div class="main-content">
+  <ngx-loading
+    [show]="loading"
+    [config]="{
+      fullScreenBackdrop: true,
+      backdropBorderRadius: '3px',
+      primaryColour: '#05386B',
+      secondaryColour: '#379683',
+      tertiaryColour: '#5CDB95'
+    }"
+    [template]="customLoadingTemplate"
+  ></ngx-loading>
+  <mat-card style="width:900px;right: 2%;">
+    <div class="row" *ngFor="let field of skills; let k = index">
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Skill Name"
+            [(ngModel)]="field.skillname"
+            name="{{field.skillname}}"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Proficiency"
+            [(ngModel)]="field.proficiency"
+            name="{{field.proficiency}}"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+      <div class="col-md-3 " (click)="deleteskill(k)">
+        <button
+          type="button"
+          style="background-color:transparent;border: none;padding: 0;"
+        >
+          <i style="color: red" class="material-icons"> delete </i>
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Skill Name"
+            [(ngModel)]="skillsAttribute.skillname"
+            name="newAttributeClient"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </mat-form-field>
+      </div>
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <mat-select
+            placeholder="Proficiency"
+            [(ngModel)]="skillsAttribute.proficiency"
+            name="{{skillsAttribute.proficiency}}"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <mat-option value="No Experince">No Experince</mat-option>
+            <mat-option value="Some Experince">Some Experince</mat-option>
+            <mat-option value="Proficient">Proficient</mat-option>
+            <mat-option value="Very Proficient">Very Proficient</mat-option>
+            <mat-option value="Expert">Expert</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3" style="font-size: 10pt" (click)="addskill()">
+        <button
+          type="button"
+          style="background-color:transparent;border: none;padding: 0;"
+        >
+          <i style="color: green" class="material-icons">
+            add_circle_outline
+          </i>
+        </button>
+      </div>
+    </div>
+    <br />
+    <button
+      mat-button
+      color="primary"
+      style="float: left; left: 150px;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      class="no-hover-effect"
+      [disabled]="!submitbutton"
+      (click)="onsave()"
+    >
+      Save
+    </button>
+    <br />
+  </mat-card>
+</div>

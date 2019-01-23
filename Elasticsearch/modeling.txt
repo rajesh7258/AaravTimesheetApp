@@ -1,0 +1,240 @@
+start elastic search:
+cd C:\MySpace\softwares\elasticsearch-6.5.3\bin
+elasticsearch.bat
+
+http://localhost:9200/employees
+{
+	"mappings":{
+		"employee":{
+			"properties":{
+				"employeeid":{"type":"keyword"},
+				"username":{"type":"keyword"},
+				"dob":{"type":"date"},
+				"joiningdate":{"type":"date"},
+				"careerstartingdate":{"type":"date"},
+				"createddate":{"type":"date"},
+			}
+		}
+	}
+}
+
+
+http://localhost:9200/timesheets
+{
+	"mappings":{
+		"timesheet":{
+			"properties":{
+				"startdate":{"type":"date"},
+				"enddate":{"type":"date"},
+				"submitteddate":{"type":"date"},
+				"employeeid":{"type":"keyword"},
+				"managername":{"type":"keyword"},
+				"manageremail":{"type":"keyword"}
+			}
+		}
+	}
+}
+
+delete http://localhost:9200/timesheets
+
+http://localhost:9200/managers
+{
+	"mappings":{
+		"manager":{
+			"properties":{
+				"managerlist":{
+					"type": "nested",
+					"properties":{
+						"name":{"type":"keyword"},
+						"email":{"type":"keyword"}
+					}
+				}
+			}
+		}
+	}
+}
+insert data
+PUT http://localhost:9200/managers/manager/1
+{
+	"doc":{
+		"managerlist":[
+			{
+				"name":"Raj",
+				"email":"raj.darji@aaravsolutions.com"
+			}
+		]
+	}
+}
+POST http://localhost:9200/managers/manager/1/_update
+appending element 
+{
+	"script": {
+	"lang": "painless",
+	"inline": "ctx._source.managerlist.add(params.managerlist);",
+	"params": {
+		"managerlist": {
+			"name":"prudhvi",
+			"email":"prudhvi.akella@aaravsolutions.com"
+			}
+		}
+	}
+}
+deleting particular element 
+POST http://localhost:9200/managers/manager/1/_update
+{
+	"script": {
+	"lang": "painless",
+	"inline": "if(ctx._source.managerlist!== null ){for (int i = 0; i < ctx._source.managerlist.length; ++i){if(ctx._source.managerlist[i].name == \"Raj\"){ctx._source.managerlist.remove(i)}}}"
+	}
+}
+
+post http://localhost:9200/employees/employee/AS028/_update
+{
+"script" : {
+    "source": "if(ctx._source.skills.length != 0){for(int i = 0; i < params.skills.length; ++i){ int k= 0;for (int j = 0; j < ctx._source.skills.length; ++j){   if(ctx._source.skills[j].skillname == params.skills[i].skillname){k++} } if(k ==0){ctx._source.skills.add(params.skills[i])}}}else{for(int i =0;i <params.skills.length; ++i){ctx._source.skills.add(params.skills[i])}}",
+    "lang": "painless",
+    "params": {
+                "skills": [
+              {
+                "skillname" : "C++",
+                "proficiency" : "Proficient"
+              },
+              {
+                "skillname" : "C",
+                "proficiency" : "Some Experince"
+              }
+            ]
+    }
+ }
+}
+
+put http://localhost:9200/holidays
+{
+	"mappings":{
+		"holiday":{
+			"properties":{
+				"holidaylist":{
+					"type": "nested"
+				}
+			}
+		}
+	}
+}
+PUT http://localhost:9200/holidays/holiday/1
+{
+	
+	"holidaylist": []
+}
+
+Script to update delete or add the holidaylist
+"if(ctx._source.holidaylist.length != 0){
+	for(int i = 0; i < params.holidaylist.length; ++i){ 
+		int k= 0;
+		for (int j = 0; j < ctx._source.holidaylist.length; ++j){   
+			if(ctx._source.holidaylist[j].occasion == params.holidaylist[i].occasion && ctx._source.holidaylist[j].country == params.holidaylist[i].country && ctx._source.holidaylist[j].year == params.holidaylist[i].year)
+			{
+				k++
+			} 
+		} 
+		if(k ==0){
+			ctx._source.holidaylist.add(params.holidaylist[i])
+		}
+	}
+	for(int k = 0; k < ctx._source.holidaylist.length; ++k)
+	{
+		int m=0;
+		for(int l = 0; l < params.holidaylist.length; ++l){
+			if(ctx._source.holidaylist[j].occasion == params.holidaylist[i].occasion && ctx._source.holidaylist[j].country == params.holidaylist[i].country && ctx._source.holidaylist[j].year == params.holidaylist[i].year){
+				m++
+			}
+		}
+		if(m == 0){
+			if(ctx._source.holidaylist[j].country == params.holidaylist[i].country){
+				ctx._source.holidaylist.remove(k)
+			}
+		}
+	}
+}
+else{
+	for(int i =0;i <params.holidaylist.length; ++i){
+		ctx._source.holidaylist.add(params.holidaylist[i])
+	}
+}",
+             
+http://localhost:9200/clients
+{
+	"mappings":{
+		"client":{
+			"properties":{
+				"clientlist":{
+					"type": "nested",
+					"properties":{
+						"name":{"type":"keyword"},
+						"status":{"type":"keyword"},
+						"createdate":{"type":"date"},
+						"createby":{"type":"keyword"}
+					}
+				}
+			}
+		}
+	}
+}
+http://localhost:9200/clients/client/1
+{
+	
+	"clientlist": [
+		{
+			"name":"Internal",
+			"status":"active"
+		},{
+			"name":"POC",
+			"status":"active"
+		}]
+}
+
+http://localhost:9200/projects
+{
+	"mappings":{
+		"project":{
+			"properties":{
+				"projectlist":{
+					"type": "nested",
+					"properties":{
+						"name":{"type":"keyword"},
+						"status":{"type":"keyword"},
+						"createdate":{"type":"date"},
+						"clientname":{"type":"keyword"},
+						"eststartdate":{"type":"date"},
+						"estenddate":{"type":"date"},
+						"createby":{"type":"keyword"}
+					}
+				}
+			}
+		}
+	}
+}
+http://localhost:9200/projects/project/1
+{
+	
+	"projectlist": []
+}
+
+http://localhost:9200/leaves
+{
+	"mappings":{
+		"leave":{
+			"properties":{
+				"createdate":{"type":"date"},
+				"startdate":{"type":"date"},
+				"enddate":{"type":"date"},
+				"type":{"type":"keyword"},
+				"employeeid":{"type":"keyword"},
+				"employeeemail":{"type":"keyword"},
+				"manageremail":{"type":"keyword"},
+				"managereid":{"type":"keyword"}
+			}
+		}
+	}
+}
+
+C:\MySpace\softwares\elasticsearch-6.5.3\bin>elasticsearch.bat

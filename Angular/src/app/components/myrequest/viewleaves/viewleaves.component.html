@@ -1,0 +1,78 @@
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    fullScreenBackdrop: true,
+    backdropBorderRadius: '3px',
+    primaryColour: '#05386B',
+    secondaryColour: '#379683',
+    tertiaryColour: '#5CDB95'
+  }"
+  [template]="customLoadingTemplate"
+></ngx-loading>
+<div class="row">
+  <mat-form-field style="left:50px;position: relative;width: 60%">
+    <mat-select placeholder="Type" [formControl]="typecontroller">
+      <mat-option *ngFor="let type of types" [value]="type.name">
+        {{ type.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="row">
+  <mat-form-field style="left:50px;position: relative;width: 60%;">
+    <input
+      matInput
+      [min]="maxdate"
+      [matDatepicker]="picker1"
+      [matDatepickerFilter]="datefilter"
+      placeholder="From"
+      [formControl]="fromdate"
+      (dateChange)="expreincetotalexp($event)"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+</div>
+<div class="row">
+  <mat-form-field style="left:50px;position: relative;width: 60%">
+    <input
+      matInput
+      [min]="maxdate"
+      [matDatepicker]="picker2"
+      [matDatepickerFilter]="datefilter"
+      placeholder="To"
+      [formControl]="todate"
+      (dateChange)="expreincetotalexp($event)"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2></mat-datepicker>
+  </mat-form-field>
+</div>
+<div class="row">
+  <mat-form-field style="left:50px;position: relative;width: 60%">
+    <input matInput placeholder="leave" [formControl]="leave" />
+  </mat-form-field>
+</div>
+<div class="row">
+  <mat-form-field style="left:50px;position: relative;width: 60%">
+    <textarea matInput placeholder="Comment" [formControl]="comment"></textarea>
+  </mat-form-field>
+</div>
+<br />
+<hr />
+<div mat-dialog-actions>
+  <button
+    (click)="onApply()"
+    mat-button
+    style=" left: 0px;background-color: #009688!important;color:white;font-size:10px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+  >
+    Apply
+  </button>
+  <button
+    (click)="onclose()"
+    mat-button
+    style=" left: 0px;background-color: #009688!important;color:white;font-size:10px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+  >
+    Close
+  </button>
+</div>

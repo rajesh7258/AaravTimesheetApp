@@ -1,0 +1,414 @@
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    fullScreenBackdrop: true,
+    backdropBorderRadius: '3px',
+    primaryColour: '#05386B',
+    secondaryColour: '#379683',
+    tertiaryColour: '#5CDB95'
+  }"
+  [template]="customLoadingTemplate"
+></ngx-loading>
+<p
+  style="position: relative;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+>
+  <b>Employeeid</b>&nbsp;:&nbsp;{{ employeeid }}
+</p>
+<table class="table table-borderless table-format">
+  <thead>
+    <tr>
+      <th width="3%"></th>
+      <th width="5%"></th>
+      <th width="15%"></th>
+      <th width="20%"></th>
+      <th class="columnsformat">Mon</th>
+      <th class="columnsformat">Tue</th>
+      <th class="columnsformat">Wed</th>
+      <th class="columnsformat">Thu</th>
+      <th class="columnsformat">Fri</th>
+      <th class="columnsformat">Sat</th>
+      <th class="columnsformat">Sun</th>
+    </tr>
+    <tr>
+      <th width="3%"></th>
+      <th width="5%" class="columnsformat">Client</th>
+      <th width="15%" class="columnsformat">Project</th>
+      <th width="20%" class="columnsformat">Task</th>
+      <th class="columnsformat">
+        <input
+          class="removeinputborder"
+          type="text"
+          style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+          [(ngModel)]="monday"
+          readonly
+        />
+      </th>
+      <th class="columnsformat">
+        <input
+          class="removeinputborder"
+          type="text"
+          style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+          [(ngModel)]="tuesday"
+          readonly
+        />
+      </th>
+      <th class="columnsformat">
+        <input
+          class="removeinputborder"
+          type="text"
+          style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+          [(ngModel)]="wednesday"
+          readonly
+        />
+      </th>
+      <th class="columnsformat">
+        <input
+          class="removeinputborder"
+          type="text"
+          style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+          [(ngModel)]="thrusday"
+          readonly
+        />
+      </th>
+      <th class="columnsformat">
+        <input
+          class="removeinputborder"
+          type="text"
+          style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+          [(ngModel)]="friday"
+          readonly
+        />
+      </th>
+      <th class="columnsformat">
+        <input
+          class="removeinputborder"
+          type="text"
+          style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+          [(ngModel)]="saturday"
+          readonly
+        />
+      </th>
+      <th class="columnsformat">
+        <input
+          class="removeinputborder"
+          type="text"
+          style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+          [(ngModel)]="sunday"
+          readonly
+        />
+      </th>
+      <th class="columnsformat">Total</th>
+    </tr>
+  </thead>
+  <tbody style="font-size: 12px">
+    <tr *ngFor="let field of timesheet; let i = index">
+      <td></td>
+      <td>
+        <mat-form-field style="width:100px">
+          <!--<mat-select
+              placeholder=""
+              [(ngModel)]="field.client"
+              [ngModelOptions]="{ standalone: true }"
+              [disabled]="disableSelect.value"
+            >
+            <mat-option
+            *ngFor="let client of clientlist"
+            [value]="client.name"
+          >
+            {{ client.name }}
+          </mat-option>
+            </mat-select>-->
+          <input
+            matInput
+            [(ngModel)]="field.client"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:100px">
+          <!--<mat-select
+              placeholder=""
+              [(ngModel)]="field.project"
+              [ngModelOptions]="{ standalone: true }"
+              [disabled]="disableSelect.value"
+            >
+            <mat-option
+            *ngFor="let project of projectlist"
+            [value]="project.name"
+          >
+            {{ project.name }}
+          </mat-option>
+            </mat-select>-->
+          <input
+            matInput
+            [(ngModel)]="field.project"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:100%">
+          <input
+            matInput
+            [(ngModel)]="field.task"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.mon"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.tue"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.wed"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.thu"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.fri"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.sat"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.sun"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.total"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br />
+<p
+  style="font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: bold"
+>
+  Timeoff
+</p>
+<table
+  style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: bold"
+  class="table table-borderless table-format"
+>
+  <thead>
+    <tr>
+      <th width="3%"></th>
+      <th width="5%"></th>
+      <th width="15%"></th>
+      <th width="20%"></th>
+      <th class="columnsformat"></th>
+      <th class="columnsformat"></th>
+      <th class="columnsformat"></th>
+      <th class="columnsformat"></th>
+      <th class="columnsformat"></th>
+      <th class="columnsformat"></th>
+      <th class="columnsformat"></th>
+    </tr>
+  </thead>
+  <tbody style="font-size: 12px">
+    <tr *ngFor="let field of holidayentry; let j = index">
+      <td></td>
+      <td style="width:100%"><input class="removeinputborders" /></td>
+      <td style="width:100%"><input class="removeinputborders" /></td>
+      <td>
+        <mat-form-field style="width:100%">
+          <!--<mat-select
+                placeholder=""
+                [(ngModel)]="field.task"
+                [ngModelOptions]="{ standalone: true }"
+                [disabled]="disableSelect.value"
+              >
+                <mat-option value="Male">Male</mat-option>
+                <mat-option value="Female">Female</mat-option>
+              </mat-select>-->
+          <input
+            matInput
+            [(ngModel)]="field.task"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.mon"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.tue"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.wed"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.thu"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.fri"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.sat"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.sun"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field style="width:40px">
+          <input
+            matInput
+            [(ngModel)]="field.total"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="row">
+  <p>
+    <b>In case if reject please fill the reason &nbsp;:&nbsp;</b>
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+        [formControl]="rejectdescription"
+      />
+    </mat-form-field>
+  </p>
+</div>
+<br />
+<hr />
+<div mat-dialog-actions>
+  <button
+    (click)="onAccept()"
+    mat-button
+    style="float: left; left: 0px;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+  >
+    Approve
+  </button>
+  <button
+    (click)="onReject()"
+    mat-button
+    style="float: left; left: 0px;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+  >
+    Reject
+  </button>
+  <button
+    (click)="closeModal('Close')"
+    mat-button
+    style="float: left; left: 0px;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+  >
+    Close
+  </button>
+</div>

@@ -1,0 +1,131 @@
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    fullScreenBackdrop: true,
+    backdropBorderRadius: '3px',
+    primaryColour: '#05386B',
+    secondaryColour: '#379683',
+    tertiaryColour: '#5CDB95'
+  }"
+  [template]="customLoadingTemplate"
+></ngx-loading>
+<mat-card>
+  <div *ngIf="dontshowview">
+    <table border="1" class="table-hover table-sm">
+      <thead
+        class="thead-light"
+        style="font-family: Verdana, Geneva, Tahoma, sans-serif;font-size: 11px;text-align:center"
+      >
+        <tr>
+          <th>Employeeid</th>
+          <th>Leavetype</th>
+          <th>Fromdate</th>
+          <th>Todate</th>
+          <th>Days</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let field of appoveleave; let j = index">
+          <td>
+            <input
+              matInput
+              class="removeborderinput"
+              [(ngModel)]="field.employeeid"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+          </td>
+          <td>
+            <input
+              matInput
+              class="removeborderinput"
+              [(ngModel)]="field.leavetype"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+          </td>
+          <td>
+            <input
+              matInput
+              class="removeborderinput"
+              [matDatepicker]="fromdate"
+              [(ngModel)]="field.fromdate"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+          </td>
+          <td>
+            <input
+              matInput
+              class="removeborderinput"
+              [matDatepicker]="fromdate"
+              [(ngModel)]="field.todate"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+          </td>
+          <td>
+            <input
+              matInput
+              class="removeborderinput"
+              [(ngModel)]="field.days"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+          </td>
+          <td>
+            <input
+              matInput
+              class="removeborderinput"
+              [(ngModel)]="field.leavetype"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+          </td>
+          <td>
+            <button
+              mat-button
+              color="primary"
+              style="background-color: #009688!important;color:white;font-size:8px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+              class="no-hover-effect"
+              (click)="viewdescription(j)"
+            >
+              Click to view
+            </button>
+          </td>
+          <td>
+            <button
+              mat-button
+              color="primary"
+              style="background-color: #009688!important;color:white;font-size:8px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+              class="no-hover-effect"
+              (click)="onapprove(j)"
+            >
+              Approve
+            </button>
+          </td>
+          <td>
+            <button
+              mat-button
+              color="primary"
+              style="background-color: #009688!important;color:white;font-size:8px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+              class="no-hover-effect"
+              (click)="onreject(j)"
+            >
+              Reject
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="!dontshowview">
+    <p style="left: 350px;position: relative;" class="removeborderinput">
+      No leaves to Approve
+    </p>
+  </div>
+</mat-card>

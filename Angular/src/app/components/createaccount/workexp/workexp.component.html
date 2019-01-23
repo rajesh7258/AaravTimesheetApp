@@ -1,0 +1,213 @@
+<br />
+<br />
+<div class="main-content">
+  <ngx-loading
+    [show]="loading"
+    [config]="{
+      fullScreenBackdrop: true,
+      backdropBorderRadius: '3px',
+      primaryColour: '#05386B',
+      secondaryColour: '#379683',
+      tertiaryColour: '#5CDB95'
+    }"
+    [template]="customLoadingTemplate"
+  ></ngx-loading>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+      <mat-expansion-panel-header style="background-color: #314455;">
+        <mat-panel-title
+          style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+        >
+          Current Status
+        </mat-panel-title>
+        <mat-panel-description> </mat-panel-description>
+      </mat-expansion-panel-header>
+      <br />
+      <div
+        class="row"
+        style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: black"
+      >
+        <div class="col-md-3 pl-1">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Reporting Manager"
+              [formControl]="Reportingmanager"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pl-1">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Reporting Manager Email"
+              [formControl]="Reportingemail"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div
+        class="row"
+        style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: black"
+      >
+        <div class="col-md-3 pl-1">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Company Joining Date"
+              [formControl]="Joiningday"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pl-1">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Career Start Date"
+              [formControl]="Carrerstartingday"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div
+        class="row"
+        style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: black"
+      >
+        <div class="col-md-3 pl-1">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Total Experience"
+              [formControl]="TotalExp"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pl-1">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Experience in Aarav"
+              [formControl]="CurrentExp"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div
+        class="row"
+        style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: black"
+      >
+        <div class="col-md-3 pl-1">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Job Status"
+              [formControl]="Jobsatuts"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <br />
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+      <mat-expansion-panel-header style="background-color: #314455;">
+        <mat-panel-title
+          style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+        >
+          Previous Experience
+        </mat-panel-title>
+        <mat-panel-description> </mat-panel-description>
+      </mat-expansion-panel-header>
+      <br />
+      <div class="row" *ngFor="let field of previousexperince; let k = index">
+        <div class="col-md-3 pl-1" style="font-size: 8pt">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Companyname"
+              [(ngModel)]="field.companyname"
+              name="{{field.companyname}}"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-md-2 pl-1" style="font-size: 8pt">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Designation"
+              [(ngModel)]="field.desigination"
+              name="{{field.desigination}}"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-md-2 pl-1" style="font-size: 8pt">
+          <mat-form-field class="example-full-width">
+            <!--
+              <input
+                matInput
+                placeholder="Start date"
+                [(ngModel)]="field.startdate"
+                name="{{field.startdate}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            -->
+            <input
+              [max]="maxDate"
+              matInput
+              [matDatepicker]="startexp"
+              [(ngModel)]="field.startdate"
+              placeholder="Start Date"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startexp"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startexp></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-md-2 pl-1" style="font-size: 8pt">
+          <mat-form-field class="example-full-width">
+            <!--
+              <input
+                matInput
+                placeholder="End date"
+                [(ngModel)]="field.enddate"
+                name="{{field.enddate}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            -->
+            <input
+              [max]="maxDate"
+              matInput
+              [matDatepicker]="endexp"
+              [(ngModel)]="field.enddate"
+              placeholder="End Date"
+              [ngModelOptions]="{ standalone: true }"
+              readonly
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="endexp"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #endexp></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 pl-1" style="font-size: 8pt">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              placeholder="Total Expreince"
+              [(ngModel)]="field.totalexperince"
+              name="{{field.totalexperince}}"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
