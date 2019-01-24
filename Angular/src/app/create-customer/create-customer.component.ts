@@ -55,7 +55,7 @@ export class CreateCustomerComponent implements OnInit {
   spin = false;
   private fieldArray: Array<any> = [];
   private newAttribute: any = {};
-  private helathArray: Array<any> = [];
+  private healthArray: Array<any> = [];
   private healthAttribute: any = {};
   private skills: Array<any> = [];
   newArr = [];
@@ -185,7 +185,7 @@ export class CreateCustomerComponent implements OnInit {
   }
 
   deletehealthValue(index) {
-    this.helathArray.splice(index, 1);
+    this.healthArray.splice(index, 1);
   }
 
   addhealthValue() {
@@ -205,7 +205,7 @@ export class CreateCustomerComponent implements OnInit {
       alert("Adhar Number cannot be empty");
       return;
     }
-    this.helathArray.push(this.healthAttribute);
+    this.healthArray.push(this.healthAttribute);
     this.healthAttribute = {};
     //console.log('fieldArray',this.fieldArray)
   }
@@ -276,8 +276,12 @@ export class CreateCustomerComponent implements OnInit {
 
     object["projects"] = this.fieldArray;
 
-    object["health"] = this.helathArray;
-    object["leaves"] = [];
+    object["health"] = this.healthArray;
+    object["leaves"] = [{
+      "earnedleave": 5,
+      "casualleave": 10,
+      "optionalholiday": 2
+      }];
     if (this.registerform.controls.fresher.value === true) {
       object["JoiningDate"] = new Date();
       object["careerStartingDate"] = new Date();
@@ -367,7 +371,7 @@ export class CreateCustomerComponent implements OnInit {
       // formControlName2: myValue2 (can be omitted)
     });
     this.fieldArray = [];
-    this.helathArray = [];
+    this.healthArray = [];
   }
   calculateage(event: MatDatepickerInputEvent<Date>) {
     var timeDiff = Math.abs(Date.now() - this.healthAttribute.dob);
