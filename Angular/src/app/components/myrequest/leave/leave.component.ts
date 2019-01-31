@@ -84,9 +84,11 @@ export class LeaveComponent implements OnInit {
       );
   }
   applyleave() {
+    console.log('leaves before open dialog', this.leaves);
     this.openLoginDialog(this.leaves);
   }
   openLoginDialog(object) {
+    console.log('leaves after open dialog', object);
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.width = "350px";
@@ -185,14 +187,17 @@ export class LeaveComponent implements OnInit {
                 if (this.appliedleaves[index].type === "Earned Leave") {
                   this.earnedleaves =
                     this.earnedleaves + this.appliedleaves[index].days;
+                  this.leaves["earnedleaves"] = this.earnedleaves;
                 }
                 if (this.appliedleaves[index].type === "Casual Leave") {
                   this.casualleaves =
                     this.casualleaves + this.appliedleaves[index].days;
+                  this.leaves["casualleaves"] = this.casualleaves;
                 }
                 if (this.appliedleaves[index].type === "Optional Holiday") {
                   this.optionalholidays =
                     this.optionalholidays + this.appliedleaves[index].days;
+                  this.leaves["optionalholidays"] = this.optionalholidays;
                 }
                 this.appliedleaves.splice(index, 1);
               },

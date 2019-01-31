@@ -714,6 +714,16 @@
           </mat-panel-title>
           <mat-panel-description> </mat-panel-description>
         </mat-expansion-panel-header>
+        <div class="row">
+          <div class="col-md-2 pl-1">
+            <mat-checkbox
+              style="font-size: 10px;color: #3f7f69;font-family: Verdana, Geneva, Tahoma, sans-serif"
+              class="example-margin"
+              (change)="skiphealthins($event)"
+              >Skip</mat-checkbox
+            >
+          </div>
+        </div>
         <br />
         <div class="row" *ngFor="let field of helathArray; let j = index">
           <div class="col-md-3 pl-1" style="font-size: 8pt">

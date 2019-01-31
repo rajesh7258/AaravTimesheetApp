@@ -9,6 +9,7 @@ import { AuthService } from "../../../providers/auth.service";
 import { first } from "rxjs/operators";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { ViewtimesheetComponent } from "../viewtimesheet/viewtimesheet.component";
+import { createOfflineCompileUrlResolver } from "@angular/compiler";
 @Component({
   selector: "app-approvetimesheet",
   templateUrl: "./approvetimesheet.component.html",
@@ -20,6 +21,7 @@ export class ApprovetimesheetComponent implements OnInit {
   public approvetimesheet: any = [];
   public hits = [];
   public returndialogdata;
+  userprof: any;
   constructor(private auth: AuthService, private dialog: MatDialog) {}
 
   ngOnInit() {
@@ -51,7 +53,7 @@ export class ApprovetimesheetComponent implements OnInit {
     this.openLoginDialog(this.approvetimesheet[index], index);
   }
 
-  openLoginDialog(object, index) {
+  async openLoginDialog(object, index) {
     for (let i = 0; i < this.approvetimesheet.length; i++) {
       if (
         this.approvetimesheet[i].startdate === this.hits[i]._source.startdate &&
@@ -67,11 +69,38 @@ export class ApprovetimesheetComponent implements OnInit {
     dialogConfig.position = { left: "275px" };
     dialogConfig.disableClose = true;
     dialogConfig.data = object;
-    var dialogdata: any;
+    var dialogdata: any = dialogConfig.data;
+    console.log('checkin dialog', dialogdata);
+    await this.auth
+          .getProfileById(dialogdata.employeeid)
+          .then(
+            result => {
+              console.log('userprof', result);
+              this.userprof = result;
+              //return result;
+            }
+          );
     const dialogRef = this.dialog.open(ViewtimesheetComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(val => {
       this.returndialogdata = val;
-      if (val.status !== "Close") {
+      if (val.status !== "Close") {    
+        var obj = {
+          employeeemail: this.userprof._source.username,
+          employeename: this.userprof._source.firstname,
+          fromdate: dialogdata.startdate,
+          todate: dialogdata.enddate
+        };
+        console.log('object for timesheet mail', obj);
+        this.auth.sendtimesheetrejectemail(obj)
+        .pipe(first())
+        .subscribe(
+          result => {
+            console.log("timesheet notify",result);
+          },
+          err => {
+            console.log(err);
+          }
+        );
         this.approvetimesheet.splice(index, 1);
         if (this.approvetimesheet.length === 0) {
           this.dontshowview = false;

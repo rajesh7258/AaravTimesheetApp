@@ -84,18 +84,19 @@ export class ViewleavesComponent implements OnInit {
     this.todate = new FormControl();
     this.comment = new FormControl("");
     this.leave = new FormControl(0);
-    if (this.data[0].earnedleave !== 0) {
-      this.types.push({ name: "Earned Leave" });
+    if (this.data[0].earnedleaves !== 0) {
+      this.types.push({ name: "Sick Leave" });
     }
-    if (this.data[0].casualleave !== 0) {
+    if (this.data[0].casualleaves !== 0) {
       this.types.push({ name: "Casual Leave" });
     }
-    if (this.data[0].optionalholiday !== 0) {
+    if (this.data[0].optionalholidays !== 0) {
       this.types.push({ name: "Optional Holiday" });
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   closeModal(object): void {
     this.loading = false;

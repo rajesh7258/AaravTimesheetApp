@@ -1,0 +1,117 @@
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    fullScreenBackdrop: true,
+    backdropBorderRadius: '3px',
+    primaryColour: '#05386B',
+    secondaryColour: '#379683',
+    tertiaryColour: '#5CDB95'
+  }"
+  [template]="customLoadingTemplate"
+></ngx-loading>
+<mat-card class="example-card">
+    <div class="row">
+      <mat-form-field
+        style="left:30px;font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-select
+          (selectionChange)="changeonselect($event)"
+          placeholder="Choose a option"
+          [formControl]="group"
+          required
+        >
+          <mat-option
+            value="All"
+          >
+            All    
+        </mat-option>
+        <mat-option
+            value="By Employee"
+          >
+            By Employee    
+        </mat-option>
+        <mat-option
+            value="By Manager"
+          >
+          By Manager    
+        </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngIf="isemployee" class="row">
+        <mat-form-field
+          style="left:30px;font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+        >
+        <mat-select
+          (selectionChange)="changeemployeeview($event)"
+          placeholder="Employeeid"
+          required
+          [formControl]="employeename"
+         >
+          <mat-option
+           *ngFor="let employee of employeelist"
+              [value]="employee.employeeid"
+            >
+              {{ employee.employeeid }} | {{ employee.username }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+    <div *ngIf="ismanager" class="row">
+        <mat-form-field
+          style="left:30px;font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+        >
+        <mat-select
+          (selectionChange)="changemanagerview($event)"
+          placeholder="MangerId"
+          required
+          [formControl]="manageremail"
+         >
+          <mat-option
+           *ngFor="let manager of managerlist"
+              [value]="manager.manageremail"
+            >
+              {{ manager.managerid }} | {{ manager.username }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+        <div *ngIf="ismanager || isemployee || isall" class="row">
+            <mat-form-field class="example-full-width"
+            style="left:30px;font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+              <input
+                matInput
+                [matDatepicker]="startest"
+                [formControl]="startdate"
+                placeholder="From Date"
+              />
+              <mat-datepicker-toggle matSuffix [for]="startest"></mat-datepicker-toggle>
+              <mat-datepicker #startest></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div *ngIf="ismanager || isemployee || isall" class="row">
+            <mat-form-field class="example-full-width"
+            style="left:30px;font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+              <input
+                matInput
+                [matDatepicker]="endest"
+                [formControl]="enddate"
+                placeholder="To Date"
+              />
+              <mat-datepicker-toggle matSuffix [for]="endest"></mat-datepicker-toggle>
+              <mat-datepicker #endest></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <br />
+   <button
+    *ngIf="ismanager || isemployee || isall"
+      mat-button
+      color="primary"
+      style="float: left; left: 30px;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      class="no-hover-effect"
+      (click)="onGenerate()"
+    >
+      Generate CSV
+    </button>
+    <br />
+</mat-card>

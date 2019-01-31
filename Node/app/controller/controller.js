@@ -1,4 +1,5 @@
 const uploadFolder = __basedir + "/uploads/";
+var async = require('async');
 var elasticsearch = require("elasticsearch");
 var validator = require("aadhaar-validator");
 var jwt = require("jsonwebtoken");
@@ -27,7 +28,7 @@ var client = new elasticsearch.Client({
   hosts: ["http://localhost:9200"]
 });
 
-function checkelasticsearch(callback) {
+async function checkelasticsearch(callback) {
   client.ping(
     {
       requestTimeout: 30000
@@ -47,7 +48,7 @@ function checkelasticsearch(callback) {
   );
 }
 
-exports.create = function(req, res) {
+exports.create = async function (req, res) {
   console.log(req.body);
   var passwordtobesend = "";
   var personalemail = "";
@@ -329,18 +330,16 @@ exports.create = function(req, res) {
   });
 };
 
-exports.findAll = function(req, res) {
+exports.findAll = async function (req, res) {
   checkelasticsearch(function(data) {
     if (data.message == "ok") {
       client
         .search({
-          index: "blog",
-          type: "posts",
+          index: "employees",
+          type: "employee",
           body: {
             query: {
-              match: {
-                username: "Prudhviakella"
-              }
+              "match_all":{}
             }
           }
         })
@@ -361,7 +360,7 @@ exports.findAll = function(req, res) {
   });
 };
 
-exports.signin = function(req, res) {
+exports.signin = async function (req, res) {
   checkelasticsearch(function(data) {
     if (data.message == "ok") {
       client
@@ -415,7 +414,7 @@ exports.signin = function(req, res) {
   });
 };
 
-exports.getuserprofile = function(req, res) {
+exports.getuserprofile = async function (req, res) {
   checkelasticsearch(function(data) {
     console.log(data);
     if (data.message == "ok") {
@@ -454,16 +453,16 @@ exports.getuserprofile = function(req, res) {
   });
 };
 
-exports.uploadFile = (req, res) => {
+exports.uploadFile = async (req, res) => {
   res.status(200).send(req.file.filename);
 };
 
-exports.downloadFile = (req, res) => {
+exports.downloadFile = async (req, res) => {
   let filename = req.params.filename;
   res.download(uploadFolder + filename);
 };
 
-exports.createindex = function(req, res) {
+exports.createindex = async function (req, res) {
   client.indices.create(
     {
       index: "employees"
@@ -478,7 +477,7 @@ exports.createindex = function(req, res) {
   );
 };
 
-exports.getindex = function(req, res) {
+exports.getindex = async function (req, res) {
   client
     .search({
       index: "employees",
@@ -496,7 +495,7 @@ exports.getindex = function(req, res) {
     });
 };
 
-exports.addtimeentry = function(req, res) {
+exports.addtimeentry = async function (req, res) {
   console.log(req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -526,7 +525,7 @@ exports.addtimeentry = function(req, res) {
               rejectdescription: Rejectdescpriton
             }
           },
-          function(err, resp, status) {
+          async function(err, resp, status) {
             if (err) {
               console.log("debug err");
               console.log(err);
@@ -574,6 +573,13 @@ exports.addtimeentry = function(req, res) {
               });
             } else {
               console.log("tim");
+              sendtimesheetemail(
+                req.body.employeeid,
+                req.body.managername,
+                req.body.manageremail,
+                req.body.startdate,
+                req.body.enddate
+              )
               res.status(200).json({
                 message: "timesheet added succesfully",
                 status: status,
@@ -589,7 +595,7 @@ exports.addtimeentry = function(req, res) {
   });
 };
 
-exports.gettimesheet = function(req, res) {
+exports.gettimesheet = async function (req, res) {
   client
     .search({
       index: "timesheets",
@@ -627,7 +633,188 @@ exports.gettimesheet = function(req, res) {
     });
 };
 
-exports.saveskills = function(req, res) {
+exports.getreports = async function (req, res) {
+  if(req.body.group == 'all') {
+    client
+    .search({
+      index: "timesheets",
+      type: "timesheet",
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                term: { status: 'submit' }
+              },
+              {
+                "range": {
+                  "startdate": {
+                    "gte": req.body.startdate
+                  }
+                }
+              },
+              {
+                "range": {
+                  "enddate": {
+                    "lte": req.body.enddate
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    })
+    .then(function(resp) {
+      console.log(resp);
+      var report;
+      resp.hits.hits.forEach(function(hit) {
+        report = hit;
+        console.log(hit);
+      });
+      if (report != null) {
+        res.status(200).json({ status: "find", response: resp });
+      } else {
+        res.status(200).json({ status: "nofind" });
+      }
+    });
+  }
+  if(req.body.group == 'byemployee') {
+    client
+    .search({
+      index: "timesheets",
+      type: "timesheet",
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                term: { status: 'submit' }
+              },
+              {
+                term: { employeeid: req.body.employeeid }
+              },
+              {
+                "range": {
+                  "startdate": {
+                    "gte": req.body.startdate
+                  }
+                }
+              },
+              {
+                "range": {
+                  "enddate": {
+                    "lte": req.body.enddate
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    })
+    .then(function(resp) {
+      console.log(resp);
+      var report;
+      resp.hits.hits.forEach(function(hit) {
+        report = hit;
+        console.log(hit);
+      });
+      if (report != null) {
+        res.status(200).json({ status: "find", response: resp });
+      } else {
+        res.status(200).json({ status: "nofind" });
+      }
+    });
+  }
+  if(req.body.group == 'bymanager') {
+    client
+    .search({
+      index: "timesheets",
+      type: "timesheet",
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                term: { status: 'submit' }
+              },
+              {
+                term: { manageremail: req.body.managerid }
+              },
+              {
+                "range": {
+                  "startdate": {
+                    "gte": req.body.startdate
+                  }
+                }
+              },
+              {
+                "range": {
+                  "enddate": {
+                    "lte": req.body.enddate
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    })
+    .then(function(resp) {
+      console.log(resp);
+      var report;
+      resp.hits.hits.forEach(function(hit) {
+        report = hit;
+        console.log(hit);
+      });
+      if (report != null) {
+        res.status(200).json({ status: "find", response: resp });
+      } else {
+        res.status(200).json({ status: "nofind" });
+      }
+    });
+  }
+};
+
+exports.getleavebydate = async function (req, res) {
+  client
+    .search({
+      index: "leaves",
+      type: "leave",
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                term: { employeeid: req.body.employeeid }
+              },
+              {
+                "range": {
+                  "startdate": {
+                    "gte": req.body.fromdate
+                  }
+                }
+              },
+              {
+                "range": {
+                  "enddate": {
+                    "lte": req.body.todate
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    })
+    .then(function(resp) {
+      console.log(resp);
+        res.status(200).json({ response: resp });
+      });
+};
+
+exports.saveskills = async function (req, res) {
   console.log("input", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -673,7 +860,7 @@ exports.saveskills = function(req, res) {
   });
 };
 
-exports.getholidaylist = function(req, res) {
+exports.getholidaylist = async function (req, res) {
   console.log("input", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -728,7 +915,7 @@ exports.getholidaylist = function(req, res) {
   });
 };
 
-exports.saveholiday = function(req, res) {
+exports.saveholiday = async function (req, res) {
   //console.log("input", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -774,7 +961,7 @@ exports.saveholiday = function(req, res) {
   });
 };
 
-exports.addclinetproject = function(req, res) {
+exports.addclinetproject = async function (req, res) {
   console.log("input", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -820,7 +1007,7 @@ exports.addclinetproject = function(req, res) {
   });
 };
 
-exports.addclient = function(req, res) {
+exports.addclient = async function (req, res) {
   console.log("clientinput", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -866,7 +1053,7 @@ exports.addclient = function(req, res) {
   });
 };
 
-exports.getemployeesbymanager = function(req, res) {
+exports.getemployeesbymanager = async function (req, res) {
   console.log("input", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -909,7 +1096,7 @@ exports.getemployeesbymanager = function(req, res) {
   });
 };
 
-exports.getprojectsformanager = function(req, res) {
+exports.getprojectsformanager = function (req, res) {
   console.log("input", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -962,7 +1149,7 @@ exports.getprojectsformanager = function(req, res) {
   });
 };
 
-exports.updateemployeeprojects = function(req, res) {
+exports.updateemployeeprojects = async function (req, res) {
   console.log("input", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -1008,7 +1195,7 @@ exports.updateemployeeprojects = function(req, res) {
   });
 };
 
-exports.gettimesheetformanager = function(req, res) {
+exports.gettimesheetformanager = async function (req, res) {
   console.log("input", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -1066,7 +1253,7 @@ exports.gettimesheetformanager = function(req, res) {
   });
 };
 
-exports.getholidaybydate = function(req, res) {
+exports.getholidaybydate = async function (req, res) {
   client
     .search({
       index: "holidays",
@@ -1103,7 +1290,35 @@ exports.getholidaybydate = function(req, res) {
     });
 };
 
-exports.addleaveentry = function(req, res) {
+exports.gettimesheetholidaybydate = async function (req, res) {
+  client
+    .search({
+      index: "holidays",
+      type: "holiday",
+      body: {
+        query: {
+          nested: {
+            path: "holidaylist",
+            query: {
+              range: {
+                "holidaylist.date": {
+                  gte: req.body.fromdate,
+                  lte: req.body.todate
+                }
+              }
+            },
+            inner_hits: { size: 50 }
+          }
+        }
+      }
+    })
+    .then(function(resp) {
+      console.log(resp);
+        res.status(200).json({ response: resp });
+    })
+};
+
+exports.addleaveentry = async function (req, res) {
   console.log(req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -1139,7 +1354,14 @@ exports.addleaveentry = function(req, res) {
               error: err
             });
           } else {
-            console.log("tim");
+            console.log("leav");
+            sendleaveemail(
+              req.body.employeeid,
+              req.body.managername,
+              req.body.manageremail,
+              req.body.startdate,
+              req.body.enddate
+            )
             res.status(200).json({
               message: "leave entry succesfully",
               status: status,
@@ -1154,7 +1376,7 @@ exports.addleaveentry = function(req, res) {
   });
 };
 
-exports.updateleavesforemployee = function(req, res) {
+exports.updateleavesforemployee = async function (req, res) {
   console.log("updateleaves", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -1201,7 +1423,7 @@ exports.updateleavesforemployee = function(req, res) {
   });
 };
 
-exports.reupdateleaves = function(req, res) {
+exports.reupdateleaves = async function (req, res) {
   console.log("updateleaves", req.body);
   //check whether Elastic search is running or not
   checkelasticsearch(function(data) {
@@ -1248,10 +1470,224 @@ exports.reupdateleaves = function(req, res) {
   });
 };
 
-function sendemailoncreation(
+async function sendtimesheetemail(
+  employeeid,
+  managername,
+  managermail,
+  fromdate,
+  todate
+) {
+  var errorString = "";
+  transporter.sendMail(
+    {
+      from: "nagarajesh.venturi@aaravsolutions.com",
+      to: managermail,
+      //cc:managermail
+      subject: "Timesheet Notification",
+      html:
+        '<body style="font-size: 12px;font-family: Bitter;">\n' +
+        "<p> Hi" +
+        managername +
+        ",</p>\n<p> Employee with id " +
+        employeeid +
+        "has submitted timesheet for " +
+        fromdate +
+        " - " +
+        todate +
+        "</p>" +
+        "<p>Regards,</p>\n" +
+        "<p>Nagarajesh Venturi</p>" +
+        "</body>"
+    },
+    function(err, reply) {
+      if (err) {
+        console.log(err && err.stack);
+        res.status(400).json({
+          message: "Failed to send notification to manager",            
+        });
+      }
+      if (reply) {
+        console.log(reply);
+        res.status(200).json({
+          message: "Timesheet Notifications sent to manager",
+          status: status,
+          response: resp
+        });
+      }
+    }
+  );
+}
+
+async function sendleaveemail(
+  employeeid,
+  managername,
+  managermail,
+  fromdate,
+  todate
+) {
+  var errorString = "";
+  transporter.sendMail(
+    {
+      from: "nagarajesh.venturi@aaravsolutions.com",
+      to: managermail,
+      //cc:managermail
+      subject: "Leave Notification",
+      html:
+        '<body style="font-size: 12px;font-family: Bitter;">\n' +
+        "<p> Hi " +
+        managername +
+        ",</p>\n<p> Employee with id " +
+        employeeid +
+        "has applied leave for " +
+        fromdate +
+        " - " +
+        todate +
+        "</p>\n" +
+        "<p>Regards,</p>\n" +
+        "<p>Nagarajesh Venturi</p>" +
+        "</body>"
+    },
+    function(err, reply) {
+      if (err) {
+        console.log(err && err.stack);
+        res.status(400).json({
+          message: "Failed to send notification to manager",            
+        });
+      }
+      if (reply) {
+        console.log(reply);
+        res.status(200).json({
+          message: "Leave Notifications sent to manager",
+          status: status,
+          response: resp
+        });
+      }
+    }
+  );
+}
+
+exports.sendrejectleaveemail  = async function (req, res) {
+  console.log('sending leave reject mail');
+  transporter.sendMail(
+    {
+      from: "nagarajesh.venturi@aaravsolutions.com",
+      to: req.body.employeeemail,
+      //cc:managermail
+      subject: "Leave Notification",
+      html:
+        '<body style="font-size: 12px;font-family: Bitter;">\n' +
+        "<p> Hi " +
+        req.body.employeename +
+        ",</p>\n<p> Your leave request for " +
+        req.body.fromdate +
+        " - " +
+        req.body.todate +
+        " has been rejected.</p>\n" +
+        "<p>Regards,</p>\n" +
+        "<p>Nagarajesh Venturi</p>" +
+        "</body>"
+    },
+    function(err, reply) {
+      if (err) {
+        console.log(err && err.stack);
+        res.status(400).json({
+          message: "Failed to send notification to employee",            
+        });
+      }
+      if (reply) {
+        console.log(reply);
+        res.status(200).json({
+          message: "Leave Reject Notification sent to employee",
+          status: status,
+          response: resp
+        });
+      }
+    }
+  );
+}
+exports.sendtimesheetrejectemail  = async function (req, res) {
+  console.log('sending timesheet reject mail');
+  transporter.sendMail(
+    {
+      from: "nagarajesh.venturi@aaravsolutions.com",
+      to: req.body.employeeemail,
+      //cc:managermail
+      subject: "Timesheet Notification",
+      html:
+        '<body style="font-size: 12px;font-family: Bitter;">\n' +
+        "<p> Hi " +
+        req.body.employeename +
+        ",</p>\n<p> Your timesheet for " +
+        req.body.fromdate +
+        " - " +
+        req.body.todate +
+        " has been rejected.</p>\n" +
+        "<p>Regards,</p>\n" +
+        "<p>Nagarajesh Venturi</p>" +
+        "</body>"
+    },
+    function(err, reply) {
+      if (err) {
+        console.log(err && err.stack);
+        res.status(400).json({
+          message: "Failed to send notification to employee",            
+        });
+      }
+      if (reply) {
+        console.log(reply);
+        res.status(200).json({
+          message: "Timesheet Reject Notification sent to employee",
+          status: status,
+          response: resp
+        });
+      }
+    }
+  );
+}
+
+exports.getuserprofilebyid = async function (req, res) {
+  checkelasticsearch(function(data) {
+    console.log(data);
+    if (data.message == "ok") {
+      client
+        .search({
+          index: "employees",
+          type: "employee",
+          body: {
+            query: {
+              match: {
+                employeeid: req.body.employeeid
+              }
+            }
+          }
+        })
+        .then(
+          function(resp) {
+            var userToken;
+
+            resp.hits.hits.forEach(function(hit) {
+              userToken = hit;
+            });
+            if (userToken == null) {
+              res.status(400).json({ message: "Document not found" });
+            } else {
+              res.status(200).json(userToken);
+            }
+          },
+          function(err) {
+            console.trace(err.message);
+          }
+        );
+    } else {
+      res.status(400).send({ Message: "Severisdown" });
+    }
+  });
+};
+
+async function sendemailoncreation(
   employeeid,
   password,
-  personalmail,
+  companyemail,
   aaravemail,
   managermail,
   name,
@@ -1263,11 +1699,11 @@ function sendemailoncreation(
   transporter.sendMail(
     {
       from: "nagarajesh.venturi@aaravsolutions.com",
-      to: personalmail,
+      to: companyemail,
       //cc:managermail
       subject: "AARAV USER CREATION",
       html:
-        '<body style="font-size: 10px;font-family: Bitter;">\n' +
+        '<body style="font-size: 12px;font-family: Bitter;">\n' +
         "<p>Hello " +
         name +
         ",</p>\n<p>Weclome to Aaravsolutions</p>\n" +
@@ -1324,7 +1760,7 @@ function sendemailoncreation(
   );
 }
 
-exports.resetpassword = function(req, res) {
+exports.resetpassword = async function (req, res) {
   checkelasticsearch(function(data) {
     if (data.message == "ok") {
       client
@@ -1443,7 +1879,7 @@ exports.resetpassword = function(req, res) {
   });
 };
 
-exports.updateforgetpassword = function(req, res) {
+exports.updateforgetpassword = async function (req, res) {
   var passwordtobesend = "";
   var personalemail = "";
   var companyemail = "";
@@ -1549,7 +1985,7 @@ exports.updateforgetpassword = function(req, res) {
     }
   });
 
-  function sendrestpassword(
+  async function sendrestpassword(
     password,
     personalmail,
     aaravemail,

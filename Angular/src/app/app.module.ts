@@ -73,7 +73,8 @@ export function tokenGetter() {
         blacklistedRoutes: [environment.Nodeserver + "/api/signin"]
       }
     }),
-    MatCardModule
+    MatCardModule,
+    MatIconModule
   ],
   declarations: [
     AppComponent,
