@@ -39,6 +39,8 @@ import { LeaveComponent } from "./myrequest/leave/leave.component";
 import { MaternalLeaveComponent } from "./myrequest/maternal-leave/maternal-leave.component";
 import { PaternalLeaveComponent } from "./myrequest/paternal-leave/paternal-leave.component";
 import { MyrequestnavbarComponent } from "./myrequest/myrequestnavbar/myrequestnavbar.component";
+import { ReportsComponent } from './hractivities/reports/reports.component';
+import { HrnavbarComponent } from './hractivities/hrnavbar/hrnavbar.component';
 //import { RejectleaveComponent } from "./manageractivites/rejectleave/rejectleave.component";
 
 @NgModule({
@@ -80,7 +82,9 @@ import { MyrequestnavbarComponent } from "./myrequest/myrequestnavbar/myrequestn
     LeaveComponent,
     MaternalLeaveComponent,
     PaternalLeaveComponent,
-    MyrequestnavbarComponent
+    MyrequestnavbarComponent,
+    ReportsComponent,
+    HrnavbarComponent
   ],
   exports: [
     CreateprofilenavbarComponent,
@@ -102,7 +106,9 @@ import { MyrequestnavbarComponent } from "./myrequest/myrequestnavbar/myrequestn
     LeaveComponent,
     MaternalLeaveComponent,
     PaternalLeaveComponent,
-    MyrequestnavbarComponent
+    MyrequestnavbarComponent,
+    ReportsComponent,
+    HrnavbarComponent
   ],
   providers: [AuthGuardPrimary, NavbarService]
 })

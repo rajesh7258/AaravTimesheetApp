@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "../../environments/environment.prod";
 import { ConstantPool } from "@angular/compiler/src/constant_pool";
+import 'rxjs/add/operator/toPromise';
 @Injectable({
   providedIn: "root"
 })
@@ -93,11 +94,22 @@ export class AuthService {
       );
   }
 
+  getreports(object: any): Observable<any> {
+    return this.http
+      .post(environment.Nodeserver + "/api/getreports", object)
+      .pipe(
+        map(result => {
+          return result;
+        })
+      );
+  }
+
   getManagerlist(): Observable<any> {
     return this.http
       .get(environment.Elasticsearch + "/managers/manager/1")
       .pipe(
         map(result => {
+          console.log('manager list'+ result);
           return result;
         })
       );
@@ -106,6 +118,16 @@ export class AuthService {
   getemployeedetailselastic(empid): Observable<any> {
     return this.http
       .get(environment.Elasticsearch + "/employees/employee/" + empid)
+      .pipe(
+        map(result => {
+          return result;
+        })
+      );
+  }
+
+  getallemployeedetailselastic(): Observable<any> {
+    return this.http
+      .get(environment.Elasticsearch + "/employees/employee/_search" )
       .pipe(
         map(result => {
           return result;
@@ -262,6 +284,20 @@ export class AuthService {
       );
   }
 
+  async gettimesheetholidaybydate(object: any) {
+    return await this.http.post(environment.Nodeserver + "/api/gettimesheetholidaybydate", object).toPromise();
+  }
+
+  async getleavebydate(object: any) {
+    return await this.http.post(environment.Nodeserver + "/api/getleavebydate", object).toPromise();
+  }
+
+  async getProfileById(employeeid: any) {
+    return await this.http.post(environment.Nodeserver + "/api/getuserprofilebyid", {
+        employeeid: employeeid
+      }).toPromise();
+  }
+
   saveleave(object: any): Observable<any> {
     return this.http
       .post(environment.Nodeserver + "/api/addleaveentry", object)
@@ -326,6 +362,26 @@ export class AuthService {
         environment.Elasticsearch + "/leaves/leave/" + id + "/_update?pretty",
         object
       )
+      .pipe(
+        map(result => {
+          return result;
+        })
+      );
+  }
+
+  sendrejectleaveemail(object): Observable<any> {
+    return this.http
+      .post(environment.Nodeserver + "/api/sendrejectleaveemail", object)
+      .pipe(
+        map(result => {
+          return result;
+        })
+      );
+  }
+
+  sendtimesheetrejectemail(object): Observable<any> {
+    return this.http
+      .post(environment.Nodeserver + "/api/sendtimesheetrejectemail", object)
       .pipe(
         map(result => {
           return result;

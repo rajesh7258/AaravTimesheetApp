@@ -408,6 +408,11 @@ export class CreateCustomerComponent implements OnInit {
     }
     this.registerform.controls.totalexperince.setValue(message);
   }
+  skiphealthins(event) {
+    if (event.checked === true) {
+      this.setStep(3);
+    }
+  }
   fresherornot(event) {
     if (event.checked === true) {
       this.registerform.controls.JoiningDate.setValue(new Date());

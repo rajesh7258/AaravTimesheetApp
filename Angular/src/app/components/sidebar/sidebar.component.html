@@ -96,5 +96,11 @@
         <p>Myrequests</p>
       </a>
     </li>
+    <li *ngIf="ishr === true" routerLinkActive="active" class="nav-item">
+      <a [routerLink]="'/hr/reports'">
+        <i class="now-ui-icons files_paper"></i>
+        <p>HR Activities</p>
+      </a>
+    </li>
   </ul>
 </div>

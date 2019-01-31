@@ -108,7 +108,7 @@ export class LoginComponent implements OnInit {
                 }
                 setTimeout(() => {
                   this.spinner.hide(); // To hide the spinner
-                }, 10000);
+                }, 5000);
               },
               err => {
                 console.log("error is:", err);
@@ -119,7 +119,7 @@ export class LoginComponent implements OnInit {
           this.error = "Could not authenticate";
           setTimeout(() => {
             this.spinner.hide(); // To hide the spinner
-          }, 1000);
+          }, 5000);
           alert("Authentication failed");
         }
       );

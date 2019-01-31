@@ -43,6 +43,8 @@ export class ResetpasswordComponent implements OnInit {
     });
   }
 
+  hide = true;
+
   get f() {
     return this.resetpasswordform.controls;
   }

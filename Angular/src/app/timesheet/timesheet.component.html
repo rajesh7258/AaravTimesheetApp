@@ -796,7 +796,7 @@
       <tbody style="font-size: 12px">
         <tr *ngFor="let field of holidayentry; let j = index">
           <td>
-            <div>
+            <!-- <div>
               <button
                 type="button"
                 (click)="deleteholidayentry(j)"
@@ -804,7 +804,7 @@
               >
                 <i style="color: red" class="material-icons"> delete </i>
               </button>
-            </div>
+            </div> -->
           </td>
           <td style="width:100%"><input class="removeinputborders" /></td>
           <td style="width:100%"><input class="removeinputborders" /></td>
@@ -899,7 +899,7 @@
             </mat-form-field>
           </td>
         </tr>
-        <tr [formGroup]="holidayentrygroup">
+        <!-- <tr [formGroup]="holidayentrygroup">
           <td>
             <button
               type="button"
@@ -997,7 +997,7 @@
               </mat-error>
             </mat-form-field>
           </td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
   </mat-card>

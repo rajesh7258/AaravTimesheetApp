@@ -14,6 +14,7 @@ module.exports = function(app) {
   app.post("/api/getemployeesbymanager", aarav.getemployeesbymanager);
   app.post("/api/getmanagerprojects", aarav.getprojectsformanager);
   app.post("/api/gettimesheetentry", aarav.gettimesheet);
+  app.post("/api/getreports", aarav.getreports);
   app.post("/api/saveskills", aarav.saveskills);
   app.post("/api/getholidaylist", aarav.getholidaylist);
   app.post("/api/getholidaybydate", aarav.getholidaybydate);
@@ -24,8 +25,13 @@ module.exports = function(app) {
   app.post("/api/getapprovetimesheet", aarav.gettimesheetformanager);
   app.post("/api/resetpassword", aarav.resetpassword);
   app.post("/api/forgetpassword", aarav.updateforgetpassword);
+  app.post("/api/getleavebydate",aarav.getleavebydate);
+  app.post("/api/gettimesheetholidaybydate", aarav.gettimesheetholidaybydate);
+  app.post("/api/sendrejectleaveemail", aarav.sendrejectleaveemail);
+  app.post("/api/sendtimesheetrejectemail",aarav.sendtimesheetrejectemail);
+  app.post("/api/getuserprofilebyid",aarav.getuserprofilebyid);
   // Retrieve all Customer
-  app.get("/api/customers", aarav.findAll);
+  app.get("/api/getallemployees", aarav.findAll);
   // Retrieve a single Customer by Id
   app.get("/api/file/:filename", aarav.downloadFile);
   app.get("/api/getindex", aarav.getindex);

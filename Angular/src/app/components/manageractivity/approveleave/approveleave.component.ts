@@ -21,6 +21,7 @@ export class ApproveleaveComponent implements OnInit {
   public appoveleave: any = [];
   public hits = [];
   public returndialogdata;
+  userprof: any;
 
   constructor(private auth: AuthService, private dialog: MatDialog) {}
 
@@ -88,7 +89,7 @@ export class ApproveleaveComponent implements OnInit {
         }
       );
   }
-  onreject(index: any) {
+  async onreject(index: any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.width = "700px";
@@ -97,7 +98,38 @@ export class ApproveleaveComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.data = { id: this.appoveleave[index].id };
     var dialogdata: any;
+    await this.auth
+          .getProfileById(this.appoveleave[index].employeeid)
+          .then(
+            result => {
+              console.log('userprof', result);
+              this.userprof = result;
+              //return result;
+            }
+          );
     const dialogRef = this.dialog.open(RejectleaveComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(val => {});
+    dialogRef.afterClosed().subscribe(val => {
+      var object = {
+        employeeemail: this.userprof._source.username,
+        employeename: this.userprof._source.firstname,
+        fromdate: this.appoveleave[index].fromdate,
+        todate: this.appoveleave[index].todate
+      };
+      console.log('object for leave mail', object);
+      this.auth.sendrejectleaveemail(object)
+      .pipe(first())
+      .subscribe(
+        result => {
+          console.log("leave notify",result);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+      this.appoveleave.splice(index, 1);
+      if( this.appoveleave.length === 0 ) {
+        this.dontshowview = false;
+      }
+    });
   }
 }

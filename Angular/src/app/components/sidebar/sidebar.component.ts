@@ -57,6 +57,7 @@ export const ROUTES: RouteInfo[] = [
   ]
 })
 export class SidebarComponent implements OnInit {
+  ishr = false;
   isadmin = false;
   ismanager = false;
   menuItems: any[];
@@ -86,6 +87,9 @@ export class SidebarComponent implements OnInit {
           console.log("sidenav result", result);
           this.isadmin = result._source.itadmin;
           this.ismanager = result._source.manager;
+          if( result._source.department === "HR" ) {
+            this.ishr = true;
+          }
         },
         err => {
           console.log("error is:", err);

@@ -53,6 +53,7 @@ import { NgxLoadingModule, ngxLoadingAnimationTypes } from "ngx-loading";
 import { MyrequestsComponent } from "../../myrequests/myrequests.component";
 import { ViewleavesComponent } from "../../components/myrequest/viewleaves/viewleaves.component";
 import { RejectleaveComponent } from "../../components/manageractivity/rejectleave/rejectleave.component";
+import { HractivitiesComponent } from "../../hractivities/hractivities.component";
 const config = {
   breakPoints: {
     xs: { max: 600 },
@@ -117,7 +118,8 @@ const config = {
     ViewtimesheetComponent,
     MyrequestsComponent,
     ViewleavesComponent,
-    RejectleaveComponent
+    RejectleaveComponent,
+    HractivitiesComponent
   ],
   providers: [AuthGuardPrimary],
 

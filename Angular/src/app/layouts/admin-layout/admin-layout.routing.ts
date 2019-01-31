@@ -21,6 +21,8 @@ import { MyrequestsComponent } from "../../myrequests/myrequests.component";
 import { LeaveComponent } from "../../components/myrequest/leave/leave.component";
 import { MaternalLeaveComponent } from "../../components/myrequest/maternal-leave/maternal-leave.component";
 import { PaternalLeaveComponent } from "../../components/myrequest/paternal-leave/paternal-leave.component";
+import { ReportsComponent } from "../../components/hractivities/reports/reports.component";
+import { HractivitiesComponent } from "../../hractivities/hractivities.component";
 
 export const AdminLayoutRoutes: Routes = [
   { path: "createaccount", component: CreateCustomerComponent },
@@ -89,5 +91,20 @@ export const AdminLayoutRoutes: Routes = [
       { path: "health", component: HealthComponent },
       { path: "skills", component: SkillsComponent }
     ]*/
-  }
+  },
+  {
+    path: "hr",
+    component: HractivitiesComponent,
+    children: [
+      {
+        path: "",
+        redirectTo: "reports",
+        component: ReportsComponent
+      },
+      {
+        path: "reports",
+        component: ReportsComponent
+      }
+    ]
+  },
 ];

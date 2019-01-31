@@ -11,6 +11,8 @@ import { AuthService } from "../providers/auth.service";
 import { first } from "rxjs/operators";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NgxLoadingModule, ngxLoadingAnimationTypes } from "ngx-loading";
+import { getLocaleEraNames } from "@angular/common";
+import { leave } from "@angular/core/src/profile/wtf_impl";
 
 function numberValidator(control: FormControl) {
   let number = control.value;
@@ -104,6 +106,8 @@ export class TimesheetComponent implements OnInit {
     size: "large",
     color: "#fff"
   };
+  holidayinfo: any;
+  leaveinfo: any;
   public loading = false;
   public unsubmit = false;
   public rejected = false;
@@ -202,6 +206,12 @@ export class TimesheetComponent implements OnInit {
       startdate: this.monday,
       enddate: this.sunday
     };
+
+    this.gettimeoff(localStorage.getItem("employeeid"),this.monday, this.sunday);
+
+    // this.getleavebydate(localStorage.getItem("employeeid"),this.monday, this.sunday);
+    // this.getholidaybydate(this.monday, this.sunday);
+
     this.profile
       .gettimesheet(object)
       .pipe(first())
@@ -209,6 +219,7 @@ export class TimesheetComponent implements OnInit {
         result => {
           console.log("timeresultis:", result);
           if (result.status === "find") {
+            console.log("object", object);
             if (result.response._source.status === "submit") {
               this.submitted = true;
               this.timesheet = result.response._source.weekentry;
@@ -361,6 +372,7 @@ export class TimesheetComponent implements OnInit {
       startdate: this.monday,
       enddate: this.sunday
     };
+    this.gettimeoff(localStorage.getItem("employeeid"),this.monday, this.sunday);
     this.profile
       .gettimesheet(object)
       .pipe(first())
@@ -456,6 +468,165 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
+  async gettimeoff( employeeid: any, fromdate: any, todate: any) {
+    // var holidayinfo: any = await this.getholidaybydate(fromdate, todate);
+    // var leaveinfo: any = await this.getleavebydate(employeeid, fromdate, todate);
+    await this.getholidaybydate(fromdate, todate);
+    await this.getleavebydate(employeeid, fromdate, todate);
+    var tempArr : any = [];
+    var tempHoliday : any = [];
+    console.log('leaveinfo', this.leaveinfo);
+    console.log('holidayinfo', this.holidayinfo);
+    if( this.leaveinfo.response.hits.total > 0 ) {
+      tempArr = this.leaveinfo.response.hits.hits;
+      tempHoliday = this.holidayinfo.response.hits.hits[0].inner_hits.holidaylist.hits.hits;
+      console.log('tempArr', tempArr);
+      console.log('tempHoliday', tempHoliday);
+      for( let i =0; i< tempArr.length; i++) {
+        var Fromdate = new Date(tempArr[i]._source.startdate);
+        var Todate = new Date(tempArr[i]._source.enddate);
+        console.log('checking from date value', Fromdate);
+        console.log('checkin to date value',Todate);
+        var diff = Math.abs(
+          Fromdate.getTime() - Todate.getTime()
+        );
+        var leaveentry : any = {
+          "task" : "Leave",
+          "mon" : 0,
+          "tue" : 0,
+          "wed" : 0,
+          "thu" : 0,
+          "fri" : 0,
+          "sat" : 0,
+          "sun" : 0,
+          "total" : 0
+        };
+        var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+        for (let j = 0; j < diffDays + 1; j++) {
+          var tmpdate: Date = new Date(
+            Fromdate.getFullYear(),
+            Fromdate.getMonth(),
+            Fromdate.getDate()
+          );
+          Fromdate = tmpdate;
+          
+          console.log(tmpdate);
+          if (tmpdate.getDay() !== 0 && tmpdate.getDay() !== 6) {
+            if ( this.holidayinfo.response.hits.total > 0 ) {
+              for( let k =0; k < tempHoliday.length; k++) {
+                if( tmpdate.getTime() !== new Date(tempHoliday[k]._source.date).getTime()) {
+                  // console.log('holidays',new Date(tempHoliday[k].date));
+                  console.log('leave in holiday block', tmpdate);
+                  if( tmpdate.getDay() === 1 ) {
+                    leaveentry["mon"] = 8;
+                  }
+                  if( tmpdate.getDay() === 2 ) {
+                    leaveentry["tue"] = 8;
+                  }
+                  if( tmpdate.getDay() === 3 ) {
+                    console.log('inside wednesday',leaveentry);
+                    leaveentry["wed"] = 8;
+                  }
+                  if( tmpdate.getDay() === 4 ) {
+                    leaveentry["thu"] = 8;
+                  }
+                  if( tmpdate.getDay() === 5 ) {
+                    leaveentry["fri"] = 8;
+                  }
+                }
+              }
+            }
+          }
+          tmpdate = new Date(
+            Fromdate.getFullYear(),
+            Fromdate.getMonth(),
+            Fromdate.getDate() + 1
+          );
+          Fromdate = tmpdate;
+        }
+        leaveentry.total = leaveentry.mon + leaveentry.tue + leaveentry.wed + leaveentry.thu + leaveentry.fri;
+        this.holidayentry.push(leaveentry);
+        console.log('holidayentry', this.holidayentry);
+      }
+    }
+    if ( this.holidayinfo.response.hits.total > 0 ) {
+      tempHoliday = this.holidayinfo.response.hits.hits[0].inner_hits.holidaylist.hits.hits;
+      console.log('in holi', tempHoliday )
+      var holidayentry : any = {
+        "task" : "Company Holiday",
+        "mon" : 0,
+        "tue" : 0,
+        "wed" : 0,
+        "thu" : 0,
+        "fri" : 0,
+        "sat" : 0,
+        "sun" : 0,
+        "total" : 0
+      };
+      for( let i =0; i< tempHoliday.length; i++) {
+        var dateofholiday= new Date(tempHoliday[i]._source.date);
+        if( dateofholiday.getDay() === 1 ) {
+          holidayentry["mon"] = 8;
+        }
+        if( dateofholiday.getDay() === 2 ) {
+          holidayentry["tue"] = 8;
+        }
+        if( dateofholiday.getDay() === 3 ) {
+          console.log('in wed');
+          holidayentry["wed"] = 8;
+        }
+        if( dateofholiday.getDay() === 4 ) {
+          holidayentry["thu"] = 8;
+        }
+        
+        if( dateofholiday.getDay() === 5 ) {
+          holidayentry["fri"] = 8;
+        }
+        holidayentry.task = tempHoliday[i]._source.occasion;
+        holidayentry.total = holidayentry.mon + holidayentry.tue + holidayentry.wed + holidayentry.thu + holidayentry.fri;
+        this.holidayentry.push(holidayentry);
+        console.log('holidayentry', this.holidayentry);
+      } 
+    }
+  }
+
+  async getholidaybydate(fromdate: Date, todate: Date) {
+    console.log('fromdate', fromdate);
+    console.log('todate', todate);
+    var object = {
+      "fromdate": fromdate,
+      "todate": todate
+    }
+    await this.profile
+    .gettimesheetholidaybydate(object)
+    .then(
+      result => {
+        console.log('holidaybydate', result);
+        this.holidayinfo = result;
+        //return result;
+      }
+    );
+  }
+
+  async getleavebydate( employeeid: any, fromdate: any, todate: any) {
+    console.log('fromdate', fromdate);
+    console.log('todate', todate);
+    var object = {
+      "employeeid": employeeid,
+      "fromdate": fromdate,
+      "todate": todate
+    }
+    await this.profile
+    .getleavebydate(object)
+    .then(
+      result => {
+        console.log('leavebydate', result);
+        this.leaveinfo = result;
+        //return result;
+      }
+    );
+  }
+
   next() {
     this.refreshprojects();
     this.resetvalues();
@@ -508,6 +679,7 @@ export class TimesheetComponent implements OnInit {
       startdate: this.monday,
       enddate: this.sunday
     };
+    this.gettimeoff(localStorage.getItem("employeeid"),this.monday, this.sunday);
     this.profile
       .gettimesheet(object)
       .pipe(first())
