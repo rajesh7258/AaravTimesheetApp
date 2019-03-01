@@ -58,6 +58,7 @@ export class CreateCustomerComponent implements OnInit {
   private healthArray: Array<any> = [];
   private healthAttribute: any = {};
   private skills: Array<any> = [];
+  private itassets: Array<any> = [];
   newArr = [];
   managerlist = [];
   private previousexperince: Array<any> = [];
@@ -167,7 +168,7 @@ export class CreateCustomerComponent implements OnInit {
             "/api/file/" +
             JSON.stringify(event.body).replace(/\"/g, "");
           this.uploadImage = true;
-          console.log("File is completely uploaded!");
+          console.log("File is completely uploaded!",this.imagepath);
         }
       });
 
@@ -273,7 +274,7 @@ export class CreateCustomerComponent implements OnInit {
     } else {
       object["imageURL"] = "";
     }
-
+    object["resumeURL"] = "";
     object["projects"] = this.fieldArray;
 
     object["health"] = this.healthArray;
@@ -295,6 +296,7 @@ export class CreateCustomerComponent implements OnInit {
     }
     object["previousexpreince"] = this.previousexperince;
     object["skills"] = this.skills;
+    object["itassets"] = this.itassets;
 
     //console.log("input", object);
 

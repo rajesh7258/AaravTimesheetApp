@@ -39,6 +39,72 @@
       </div>
       <br />
     </div>
+    <div class="col-md-5 pl-1">
+      <!-- <div class="container"><img class="imgclass" title="Resume" [src]="resumepath" /></div> -->
+      <div>
+        <p style="color:blue; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 10px">Resume</p>
+        <!-- <p style="color:blue; font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 15px">{{resumename}}</p> -->
+        <iframe class="controls" width="300" height="155" [src]="controllerSrc | geturl" frameborder="1" allowfullscreen></iframe>
+        <!-- 
+          <dx-report-viewer [reportUrl]="reportUrl" height="150px"> 
+            <dxrv-request-options [invokeAction]="invokeAction" [host]="resumepath"></dxrv-request-options>
+          </dx-report-viewer>
+        -->
+        <!-- <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=http://remote.url.tld/path/to/document.doc' width='1366px' height='623px' frameborder='0'>This is an embedded <a target='_blank' href='http://office.com'>Microsoft Office</a> document, powered by <a target='_blank' href='http://office.com/webapps'>Office Online</a>.</iframe> -->
+        <!-- <dx-report-viewer height="150px">  
+            <dxrv-request-options [host]="resumepath"></dxrv-request-options>
+        </dx-report-viewer> -->
+      </div>
+      <br />
+    </div>
+    <div class="col-md-2 pl-1">
+      <div class="row pb-2">
+        <input
+          type="file"
+          id="base-input"
+          (change)="selectFile2($event)"
+          class="form-control form-input form-style-base"
+          style="margin-top: 25px"
+        />
+        <input
+          type="text"
+          id="fake-input"
+          class="form-control form-input form-style-fake"
+          style="margin-top: 25px"
+          readonly
+        />
+        <span class="glyphicon glyphicon-open input-place" style="top:30px;"></span>
+      </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <div class="row pt-2">
+        <button
+          mat-button
+          color="primary"
+          style="float: left; left: 0px;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+          class="no-hover-effect"  
+          (click)="download()"
+        >
+          Download
+        </button>
+        <iframe class="controls" width="0" height="0" [src]="downloadSrc" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="uploadFile">
+    <button
+    mat-button
+    color="primary"
+    style="float: left; left: 350px"
+    class="no-hover-effect"
+    [disabled]="this.registerform.invalid"
+    (click)="saveFiles()"
+    >
+      Save
+    </button>
   </div>
   <hr />
   <br />
@@ -643,19 +709,16 @@
       <br />
     </mat-accordion>
     <br />
-    <!--
-      <hr />
-      <br />
-      <button
-        mat-button
-        color="primary"
-        style="float: left; left: 350px"
-        class="no-hover-effect"
-        [disabled]="this.registerform.invalid"
-      >
-        Submit
-      </button>
-    -->
+    <!-- <br />
+    <button
+      mat-button
+      color="primary"
+      style="float: left; left: 350px"
+      class="no-hover-effect"
+      [disabled]="this.registerform.invalid"
+    >
+      Submit
+    </button>    -->
   </form>
   <br />
 </div>

@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
+import { DomSanitizer } from '@angular/platform-browser';
 import { first } from "rxjs/operators";
 import { UploadFileService } from "../../../providers/uploadfile.service";
 import { HttpResponse, HttpEventType } from "@angular/common/http";
@@ -13,10 +14,11 @@ import { environment } from "../../../../environments/environment.prod";
 import { ConstantPool } from "@angular/compiler/src/constant_pool";
 import { Router, NavigationExtras } from "@angular/router";
 import { CreateprofilenavbarComponent } from "../createprofilenavbar/createprofilenavbar.component";
+// import { exec } from "child_process";
+import { GetSafeUrl } from "./resourceurl.pipe"
 
 export interface Sex {
   name: string;
-
   value: string;
 }
 @Component({
@@ -25,12 +27,14 @@ export interface Sex {
   styleUrls: ["./primary.component.scss"]
 })
 export class PrimaryComponent implements OnInit {
+  controllerSrc: any;
+  downloadSrc: any;
   public profileinfo: any;
   registerform: FormGroup;
   selectedFiles: FileList;
   currentFileUpload: File;
   progress: { percentage: number } = { percentage: 0 };
-  uploadImage: boolean = false;
+  uploadFile: boolean = false;
   maxDate = new Date();
   spin = false;
   private fieldArray: Array<any> = [];
@@ -39,11 +43,13 @@ export class PrimaryComponent implements OnInit {
   private healthAttribute: any = {};
   newArr = [];
   step = 0;
+  resumename : string;
 
   constructor(
     private profile: AuthService,
     private formBuilder: FormBuilder,
-    private uploadService: UploadFileService
+    private uploadService: UploadFileService,
+    private sanitizer: DomSanitizer
   ) {
     var today, todayNumber, mondayNumber, sundayNumber, monday, sunday;
     today = new Date();
@@ -97,6 +103,7 @@ export class PrimaryComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.registerform = this.formBuilder.group({
       Employeeid: ["", [Validators.required]],
       firstname: ["", [Validators.required]],
@@ -135,6 +142,18 @@ export class PrimaryComponent implements OnInit {
           if (this.profileinfo._source.imageURL != "") {
             this.imagepath = this.profileinfo._source.imageURL;
           }
+          if (this.profileinfo._source.resumeURL != "") {
+            this.resumepath = this.profileinfo._source.resumeURL;
+            // this.controllerSrc = this.sanitizer.bypassSecurityTrustResourceUrl("https://view.officeapps.live.com/op/embed.aspx?src="+this.resumepath);
+            // this.controllerSrc = this.sanitizer.bypassSecurityTrustResourceUrl("https://docs.google.com/gview?url="+this.resumepath+"&embedded=true");
+            // console.log('controllerSrc',this.controllerSrc);
+            // console.log('santized',this.sanitizer.bypassSecurityTrustResourceUrl(this.resumepath));
+            // this.controllerSrc = "https://view.officeapps.live.com/op/embed.aspx?src="+this.sanitizer.bypassSecurityTrustResourceUrl(this.resumepath);
+            this.resumename = this.resumepath.substr(this.resumepath.lastIndexOf('/') + 1);
+            this.controllerSrc = "https://docs.google.com/gview?url="+this.resumepath+"&embedded=true";
+            // this.controllerSrc = "https://view.officeapps.live.com/op/view.aspx?src="+this.resumepath;
+            console.log('controllerSrc',this.controllerSrc);
+          }
           this.registerform.patchValue({
             Employeeid: this.profileinfo._source.employeeid,
             firstname: this.profileinfo._source.firstname,
@@ -171,15 +190,31 @@ export class PrimaryComponent implements OnInit {
           console.log("error is:", err);
         }
       );
+    // this.execforiframe();
   }
+
+  // execforiframe() {
+  //   this.controllerSrc = this.sanitizer.bypassSecurityTrustResourceUrl("https://docs.google.com/gview?url="+this.resumepath+"&embedded=true");
+  //   console.log('controllerSrc',this.controllerSrc);
+  // }
   selectFile(event) {
     this.selectedFiles = event.target.files;
     this.upload();
   }
+  selectFile2(event) {
+    this.selectedFiles = event.target.files;
+    this.uploadResume();
+  }
   imagepath = "https://www.freeiconspng.com/uploads/no-image-icon-4.png";
+  resumepath = "";
 
   get f() {
     return this.registerform.controls;
+  }
+
+  download() {
+    this.downloadSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.resumepath);
+
   }
 
   upload() {
@@ -194,16 +229,60 @@ export class PrimaryComponent implements OnInit {
             (100 * event.loaded) / event.total
           );
         } else if (event instanceof HttpResponse) {
+          if (this.imagepath != null) {
+            var obj: any = {};
+            obj["filename"] = this.imagepath.substr(this.imagepath.lastIndexOf('/') + 1);
+            this.profile.deleteFile(obj).subscribe(result => console.log('delete',result));
+          }
           this.imagepath =
             environment.Nodeserver +
             "/api/file/" +
             JSON.stringify(event.body).replace(/\"/g, "");
-          this.uploadImage = true;
-          console.log("File is completely uploaded!");
+          this.uploadFile = true;
+          console.log("File is completely uploaded!",this.imagepath);
         }
       });
 
     this.selectedFiles = undefined;
+  }
+
+  uploadResume() {
+    this.progress.percentage = 0;
+
+    this.currentFileUpload = this.selectedFiles.item(0);
+    this.uploadService
+      .pushFileToStorage(this.currentFileUpload)
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.progress.percentage = Math.round(
+            (100 * event.loaded) / event.total
+          );
+        } else if (event instanceof HttpResponse) {
+          if (this.resumepath != null) {
+            var obj: any = {};
+            this.resumename = this.resumepath.substr(this.resumepath.lastIndexOf('/') + 1);
+            obj["filename"] = this.resumename;
+            this.profile.deleteFile(obj).subscribe(result => console.log('delete',result));
+          }
+          this.resumepath =
+            environment.Nodeserver +
+            "/api/file/" +
+            JSON.stringify(event.body).replace(/\"/g, "");
+          this.uploadFile = true;
+          this.controllerSrc = "https://docs.google.com/gview?url="+this.resumepath+"&embedded=true";
+          //this.controllerSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.resumepath);
+          //this.controllerSrc = 'https://view.officeapps.live.com/op/embed.aspx?src=' + 
+          //                           this.sanitizer.bypassSecurityTrustResourceUrl(this.resumepath);
+          // this.execforiframe();
+          // console.log('controllerSrc',this.controllerSrc);
+          // console.log("File is completely uploaded!");
+          // this.controllerSrc = "https://docs.google.com/gview?key=AIzaSyDcfueDpuiuMbm68leG6HNs6pB4OO83nYQ&embedded=true&url=http://192.168.5.53:8081/api/file/Nagarajesh_Venturi_BRM_Developer_Aarav.doc";
+          // this.controllerSrc = "https://view.officeapps.live.com/op/view.aspx?src=http://192.168.5.53:8081/api/file/Nagarajesh_Venturi_BRM_Developer_Aarav.doc";
+          // this.controllerSrc = "https://docs.google.com/gview?url=http://192.168.5.53:8081/api/file/Nagarajesh_Venturi_BRM_Developer_Aarav.doc&embedded=true&";
+        }
+      });
+
+    this.selectedFiles = undefined; 
   }
 
   addprojectValue() {
@@ -239,4 +318,24 @@ export class PrimaryComponent implements OnInit {
   }
 
   onSubmit() {}
+
+  saveFiles() {
+    var object: any = {};
+    object["emplyoeeid"]
+    this.profile
+      .saveFile({
+        employeeid: this.profileinfo._source.employeeid,
+        imageURL: this.imagepath,
+        resumeURL: this.resumepath
+      })
+      .pipe(first())
+      .subscribe(
+        result => {
+          console.log("file upload result is:", result);
+        },
+        err => {
+          console.log("error is:", err);
+        }
+      );
+  }
 }

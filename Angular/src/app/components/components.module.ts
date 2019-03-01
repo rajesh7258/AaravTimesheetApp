@@ -41,7 +41,11 @@ import { PaternalLeaveComponent } from "./myrequest/paternal-leave/paternal-leav
 import { MyrequestnavbarComponent } from "./myrequest/myrequestnavbar/myrequestnavbar.component";
 import { ReportsComponent } from './hractivities/reports/reports.component';
 import { HrnavbarComponent } from './hractivities/hrnavbar/hrnavbar.component';
+import { ItnavbarComponent } from './itactivities/itnavbar/itnavbar.component';
+import { TrackasssetsComponent } from './itactivities/trackasssets/trackasssets.component';
+// import { DxReportViewerModule } from 'devexpress-reporting-angular';  
 //import { RejectleaveComponent } from "./manageractivites/rejectleave/rejectleave.component";
+import { GetSafeUrl } from './createaccount/primary/resourceurl.pipe';
 
 @NgModule({
   imports: [
@@ -63,6 +67,8 @@ import { HrnavbarComponent } from './hractivities/hrnavbar/hrnavbar.component';
     NgxLoadingModule.forRoot({})
   ],
   declarations: [
+    // DxReportViewerModule,
+    GetSafeUrl,
     NavbarComponent,
     SidebarComponent,
     ReportnavbarComponent,
@@ -84,7 +90,9 @@ import { HrnavbarComponent } from './hractivities/hrnavbar/hrnavbar.component';
     PaternalLeaveComponent,
     MyrequestnavbarComponent,
     ReportsComponent,
-    HrnavbarComponent
+    HrnavbarComponent,
+    ItnavbarComponent,
+    TrackasssetsComponent
   ],
   exports: [
     CreateprofilenavbarComponent,
@@ -108,7 +116,9 @@ import { HrnavbarComponent } from './hractivities/hrnavbar/hrnavbar.component';
     PaternalLeaveComponent,
     MyrequestnavbarComponent,
     ReportsComponent,
-    HrnavbarComponent
+    HrnavbarComponent,
+    ItnavbarComponent,
+    TrackasssetsComponent
   ],
   providers: [AuthGuardPrimary, NavbarService]
 })

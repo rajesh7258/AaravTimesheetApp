@@ -1,0 +1,173 @@
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    fullScreenBackdrop: true,
+    backdropBorderRadius: '3px',
+    primaryColour: '#05386B',
+    secondaryColour: '#379683',
+    tertiaryColour: '#5CDB95'
+  }"
+  [template]="customLoadingTemplate"
+></ngx-loading>
+<mat-card class="example-card">
+  <div
+    class="row"
+    style="font-size: 11px;font-family: Verdana, Geneva, Tahoma, sans-serif"
+  >
+    <div class="row">
+      <mat-form-field
+        style="left:30px;font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-select
+          (selectionChange)="changeemployeeview($event)"
+          placeholder="Employeeid"
+          [formControl]="employeeid"
+          required
+        >
+          <mat-option
+            *ngFor="let employee of employeelist"
+            [value]="employee.username"
+          >
+            {{ employee.employeeid }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div
+    *ngIf="employeefound"
+    style="font-size: 10px;font-family: Verdana, Geneva, Tahoma, sans-serif;left:15px;position: relative;"
+  >
+    <br />
+    <div class="row"><b>Employeeid :</b> &nbsp;{{ this.employeeid }}</div>
+    <div class="row"><b>Name :</b> &nbsp;{{ this.name }}</div>
+    <div class="row"><b>Email :</b> &nbsp;{{ this.emailaddress }}</div>
+  </div>
+  <br />
+  <div *ngIf="employeefound">
+    <div class="row" *ngFor="let field of itassets; let k = index">
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="IT Asset Name"
+            [(ngModel)]="field.name"
+            name="{{field.name}}"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Asset ID"
+            [(ngModel)]="field.id"
+            name="{{field.id}}"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Asset Type"
+            [(ngModel)]="field.type"
+            name="{{field.type}}"
+            [ngModelOptions]="{ standalone: true }"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+      <div class="col-md-3 " (click)="deleteitasset(k)">
+        <button
+          type="button"
+          style="background-color:transparent;border: none;padding: 0;"
+        >
+          <i style="color: red" class="material-icons"> delete </i>
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Asset Name"
+            [(ngModel)]="itassetsAttribute.name"
+            name="newAttributeClient"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </mat-form-field>
+      </div>
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            placeholder="Asset ID"
+            [(ngModel)]="itassetsAttribute.id"
+            name="{{itassetsAttribute.id}}"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </mat-form-field>
+      </div>
+      <div
+        class="col-md-3 pl-1"
+        style="font-size: 8pt;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      >
+        <mat-form-field class="example-full-width">
+          <mat-select
+            placeholder="Asset Type"
+            [(ngModel)]="itassetsAttribute.type"
+            name="{{itassetsAttribute.type}}"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <mat-option value="Hardware">Hardware</mat-option>
+            <mat-option value="Software">Software</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3" style="font-size: 10pt" (click)="additasset()">
+        <button
+          type="button"
+          style="background-color:transparent;border: none;padding: 0;"
+        >
+          <i style="color: green" class="material-icons">
+            add_circle_outline
+          </i>
+        </button>
+      </div>
+    </div>
+    <br />
+    <button
+      mat-button
+      color="primary"
+      style="float: left; left: 0px;background-color: #009688!important;color:white;font-weight: bold;font-size:12px;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      class="no-hover-effect"
+      [disabled]="!submitbutton"
+      (click)="onsave()"
+    >
+      Save
+    </button>
+  </div>
+  <br />
+</mat-card>

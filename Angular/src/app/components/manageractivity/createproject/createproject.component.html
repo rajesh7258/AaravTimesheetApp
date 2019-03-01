@@ -133,14 +133,15 @@
       <div class="col-md-4 pl-1">
         <div class="form-group">
           <mat-form-field>
+            
             <input
-              [max]="maxDate"
               matInput
               [matDatepicker]="enddate"
               formControlName="estimatedenddate"
               placeholder="Estimated End Date"
               required
             />
+            <!-- [max]="maxDate" -->
             <mat-datepicker-toggle
               matSuffix
               [for]="enddate"

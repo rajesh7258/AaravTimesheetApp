@@ -113,6 +113,7 @@ export class TimesheetComponent implements OnInit {
   public rejected = false;
   public rejectdesc = "";
   unsubmitid = "";
+  enableEdit : boolean = false;
   constructor(
     private formBuilder: FormBuilder,
     private profile: AuthService,
@@ -327,6 +328,9 @@ export class TimesheetComponent implements OnInit {
       sun: ["", [numberValidator]],
       total: ["0.0"]
     });
+  }
+  enableedit() {
+    this.enableEdit = true;
   }
   previous() {
     this.refreshprojects();

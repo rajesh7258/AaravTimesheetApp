@@ -234,6 +234,16 @@ export class AuthService {
       );
   }
 
+  saveitassets(object: any): Observable<any> {
+    return this.http
+      .post(environment.Nodeserver + "/api/saveassets", object)
+      .pipe(
+        map(result => {
+          return result;
+        })
+      );
+  }
+
   saveholiday(object: any): Observable<any> {
     return this.http
       .post(environment.Nodeserver + "/api/updateholidaylist", object)
@@ -301,6 +311,16 @@ export class AuthService {
   saveleave(object: any): Observable<any> {
     return this.http
       .post(environment.Nodeserver + "/api/addleaveentry", object)
+      .pipe(
+        map(result => {
+          return result;
+        })
+      );
+  }
+
+  saveFile(object: any): Observable<any> {
+    return this.http
+      .post(environment.Nodeserver + "/api/saveFiles", object)
       .pipe(
         map(result => {
           return result;
@@ -387,6 +407,16 @@ export class AuthService {
           return result;
         })
       );
+  }
+
+  deleteFile(object: any): Observable<any> {
+    return this.http
+            .post(environment.Nodeserver + "/api/file/delete", object)
+            .pipe(
+              map(result => {
+                return result;
+              })
+            );
   }
 
   deleteleaverequest(id): Observable<any> {

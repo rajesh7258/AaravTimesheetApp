@@ -178,7 +178,7 @@ export class AllocatedeallocateprojComponent implements OnInit {
   }
   deleteprojectValue(index) {
     this.projectlist.splice(index, 1);
-    if (this.projectlist.length > 0) {
+    if (this.projectlist.length >= 0) {
       this.submitbutton = true;
     } else {
       this.submitbutton = false;
