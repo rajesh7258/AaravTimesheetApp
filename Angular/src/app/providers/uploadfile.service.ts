@@ -22,7 +22,7 @@ export class UploadFileService {
         responseType: "text"
       }
     );
-
+    console.log('upload',this.http.request(req));
     return this.http.request(req);
   }
 }

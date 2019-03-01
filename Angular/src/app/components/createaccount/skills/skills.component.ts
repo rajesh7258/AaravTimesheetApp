@@ -23,8 +23,11 @@ export class SkillsComponent implements OnInit {
       .pipe(first())
       .subscribe(
         result => {
+          console.log('skills', result);
           this.loading = false;
-          this.skills = result._source.skills;
+          if (result._source.skills.length !=0) {
+            this.skills = result._source.skills;
+          }
           for (let i = 0; i < this.skills.length; i++) {
             this.submitcheck++;
           }
@@ -68,6 +71,7 @@ export class SkillsComponent implements OnInit {
       employeeid: localStorage.getItem("employeeid"),
       skills: this.skills
     };
+    console.log('object for assets',object);
     this.auth
       .saveskills(object)
       .pipe(first())

@@ -1,8 +1,34 @@
-start elastic search:
-cd C:\MySpace\softwares\elasticsearch-6.5.3\bin
-elasticsearch.bat
+Start elasticsearch:
 
-http://localhost:9200/employees
+cd elasticsearch_directory/lib
+add the below lines to elasticsearch.yml
+----------------------------------------------------
+network.host: 127.0.0.1
+http.host: 0.0.0.0
+http.cors.enabled : true
+http.cors.allow-origin : "*"
+----------------------------------------------------
+
+Note: Below line
+--------------------------------------
+http.cors.allow-origin : "*"
+--------------------------------------
+allows any origin to view, delete or modify data.
+
+If you wish to allow only few ip addresses access, then try something like this.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+http.cors.allow-origin: /https?:\/\/localhost(:[0-9]+)?/http?:\/\/xxx.xxx.xxx.xxx(:[0-9]+)?/https?:\/\/yyy.yyy.yyy.yyy(:[0-9]+)?
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+See https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-http.html for more details.
+
+cd elasticsearch_directory/bin
+elasticsearch.bat or elasticsearch.sh   # To run elasticsearch
+
+Open Postman or any REST API Client of your choice and configure the DB.
+Here localhost:9200 is the publish address of elasticsearch.
+If you are running elasticsearch over a server, replace the address with your own.
+
+PUT http://localhost:9200/employees
 {
 	"mappings":{
 		"employee":{
@@ -12,14 +38,13 @@ http://localhost:9200/employees
 				"dob":{"type":"date"},
 				"joiningdate":{"type":"date"},
 				"careerstartingdate":{"type":"date"},
-				"createddate":{"type":"date"},
+				"createddate":{"type":"date"}
 			}
 		}
 	}
 }
 
-
-http://localhost:9200/timesheets
+PUT http://localhost:9200/timesheets
 {
 	"mappings":{
 		"timesheet":{
@@ -35,9 +60,7 @@ http://localhost:9200/timesheets
 	}
 }
 
-delete http://localhost:9200/timesheets
-
-http://localhost:9200/managers
+PUT http://localhost:9200/managers
 {
 	"mappings":{
 		"manager":{
@@ -53,62 +76,20 @@ http://localhost:9200/managers
 		}
 	}
 }
-insert data
+
+Add one or several manager as per requirement
+
 PUT http://localhost:9200/managers/manager/1
 {
-	"doc":{
-		"managerlist":[
-			{
-				"name":"Raj",
-				"email":"raj.darji@aaravsolutions.com"
-			}
-		]
-	}
-}
-POST http://localhost:9200/managers/manager/1/_update
-appending element 
-{
-	"script": {
-	"lang": "painless",
-	"inline": "ctx._source.managerlist.add(params.managerlist);",
-	"params": {
-		"managerlist": {
-			"name":"prudhvi",
-			"email":"prudhvi.akella@aaravsolutions.com"
-			}
+	"managerlist":[
+		{
+			"name":"Manager",
+			"email":"manager@aaravsolutions.com"
 		}
-	}
-}
-deleting particular element 
-POST http://localhost:9200/managers/manager/1/_update
-{
-	"script": {
-	"lang": "painless",
-	"inline": "if(ctx._source.managerlist!== null ){for (int i = 0; i < ctx._source.managerlist.length; ++i){if(ctx._source.managerlist[i].name == \"Raj\"){ctx._source.managerlist.remove(i)}}}"
-	}
+	]
 }
 
-post http://localhost:9200/employees/employee/AS028/_update
-{
-"script" : {
-    "source": "if(ctx._source.skills.length != 0){for(int i = 0; i < params.skills.length; ++i){ int k= 0;for (int j = 0; j < ctx._source.skills.length; ++j){   if(ctx._source.skills[j].skillname == params.skills[i].skillname){k++} } if(k ==0){ctx._source.skills.add(params.skills[i])}}}else{for(int i =0;i <params.skills.length; ++i){ctx._source.skills.add(params.skills[i])}}",
-    "lang": "painless",
-    "params": {
-                "skills": [
-              {
-                "skillname" : "C++",
-                "proficiency" : "Proficient"
-              },
-              {
-                "skillname" : "C",
-                "proficiency" : "Some Experince"
-              }
-            ]
-    }
- }
-}
-
-put http://localhost:9200/holidays
+PUT http://localhost:9200/holidays
 {
 	"mappings":{
 		"holiday":{
@@ -120,48 +101,13 @@ put http://localhost:9200/holidays
 		}
 	}
 }
+
 PUT http://localhost:9200/holidays/holiday/1
 {
-	
 	"holidaylist": []
 }
 
-Script to update delete or add the holidaylist
-"if(ctx._source.holidaylist.length != 0){
-	for(int i = 0; i < params.holidaylist.length; ++i){ 
-		int k= 0;
-		for (int j = 0; j < ctx._source.holidaylist.length; ++j){   
-			if(ctx._source.holidaylist[j].occasion == params.holidaylist[i].occasion && ctx._source.holidaylist[j].country == params.holidaylist[i].country && ctx._source.holidaylist[j].year == params.holidaylist[i].year)
-			{
-				k++
-			} 
-		} 
-		if(k ==0){
-			ctx._source.holidaylist.add(params.holidaylist[i])
-		}
-	}
-	for(int k = 0; k < ctx._source.holidaylist.length; ++k)
-	{
-		int m=0;
-		for(int l = 0; l < params.holidaylist.length; ++l){
-			if(ctx._source.holidaylist[j].occasion == params.holidaylist[i].occasion && ctx._source.holidaylist[j].country == params.holidaylist[i].country && ctx._source.holidaylist[j].year == params.holidaylist[i].year){
-				m++
-			}
-		}
-		if(m == 0){
-			if(ctx._source.holidaylist[j].country == params.holidaylist[i].country){
-				ctx._source.holidaylist.remove(k)
-			}
-		}
-	}
-}
-else{
-	for(int i =0;i <params.holidaylist.length; ++i){
-		ctx._source.holidaylist.add(params.holidaylist[i])
-	}
-}",
-             
-http://localhost:9200/clients
+PUT http://localhost:9200/clients
 {
 	"mappings":{
 		"client":{
@@ -179,9 +125,9 @@ http://localhost:9200/clients
 		}
 	}
 }
-http://localhost:9200/clients/client/1
+
+PUT http://localhost:9200/clients/client/1
 {
-	
 	"clientlist": [
 		{
 			"name":"Internal",
@@ -189,10 +135,11 @@ http://localhost:9200/clients/client/1
 		},{
 			"name":"POC",
 			"status":"active"
-		}]
+		}
+	]
 }
 
-http://localhost:9200/projects
+PUT http://localhost:9200/projects
 {
 	"mappings":{
 		"project":{
@@ -213,13 +160,13 @@ http://localhost:9200/projects
 		}
 	}
 }
-http://localhost:9200/projects/project/1
+
+PUT http://localhost:9200/projects/project/1
 {
-	
 	"projectlist": []
 }
 
-http://localhost:9200/leaves
+PUT http://localhost:9200/leaves
 {
 	"mappings":{
 		"leave":{
@@ -237,4 +184,59 @@ http://localhost:9200/leaves
 	}
 }
 
-C:\MySpace\softwares\elasticsearch-6.5.3\bin>elasticsearch.bat
+Create an admin account
+PUT http://localhost:9200/employees/employee/AS000
+{
+	"employeeid" : "AS000",
+    "password" : "$2a$08$jPDQxWAsBpwiaI9AbEeQTujR6Is5gi7VZOH/4a9Y0LtipCJrbKoqm",
+    "username" : "admin@aaravsolutions.com",
+    "firstname" : "FirstName",
+    "middlename" : "",
+    "lastname" : "LastName",
+    "employeetype" : "Regular",
+    "desigination" : "Admin",
+    "practice" : "HR",
+    "officeemail" : "FirstName.LastName@aaravsolutions.com",
+    "department" : "IT",
+    "personalemail" : "firstname@gmail.com",
+    "reportingmanager" : "Raj",
+    "reportinmanageremail" : "raj.darji@aaravsolutions.com",
+    "mentor" : "",
+    "dob" : "2013-04-08T18:30:00.000Z",
+    "joiningdate" : "2018-12-29T18:30:00.000Z",
+    "careerstartingdate" : "2013-01-31T18:30:00.000Z",
+    "adhar" : "ValidAadharNumber",
+    "pan" : "PANNumber",
+    "passport" : "Optional",
+    "sex" : "Male/Female",
+    "marraige" : "Yes/NO",
+    "bloodgroup" : "O+ve/O-ve/A+ve/A-ve/B+ve/B-ve/AB+ve/AB-ve/",
+    "presentadd" : "Present Address",
+    "premenantadd" : "Permanent Address",
+    "extension" : "+91",
+    "phonenumber" : "7842459644",
+    "createddate" : "2018-12-30T06:52:37.632Z",
+    "jobstatus" : "active",
+    "emailverified" : "Yes",
+	"imageURL": "",
+	"resumeURL": "",
+    "adminaccess" : true,
+    "manager" : false,
+	"projects": [],
+	"helathinsurance": [],
+	"skills":[],
+	"itassets":[],
+	"previousexpreince": [],
+    "fresher" : false,
+    "itadmin" : true,
+	"leaves": [{
+		"Casual Leaves": 10,
+		"Sick Leaves": 5,
+		"Optional Holidays": 2
+	}]
+}
+
+Note:
+Replace with appropriate values.
+This account can be used to create employee accounts.
+Password for this account will be "password".

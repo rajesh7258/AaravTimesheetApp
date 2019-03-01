@@ -1,3 +1,103 @@
-<p>
-  projecalloc works!
-</p>
+
+<br />
+<br />
+<div class="main-content">
+  <ngx-loading
+    [show]="loading"
+    [config]="{
+      fullScreenBackdrop: true,
+      backdropBorderRadius: '3px',
+      primaryColour: '#05386B',
+      secondaryColour: '#379683',
+      tertiaryColour: '#5CDB95'
+    }"
+    [template]="customLoadingTemplate"
+  ></ngx-loading>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true" (opened)="true">
+      <mat-expansion-panel-header style="background-color: #314455;">
+        <mat-panel-title
+          style="font-size: 12px;font-family: Verdana, Geneva, Tahoma, sans-serif;color: white"
+        >
+          Project
+        </mat-panel-title>
+        <mat-panel-description> </mat-panel-description>
+      </mat-expansion-panel-header>
+      <br />
+      <div class="row" *ngIf="!projectlist">
+        No projects assigned
+      </div>
+      <div class="row" *ngIf="projectlist?.length > 0">
+        <div *ngFor="let field of projectlist; let k = index">
+          <div class="col-md-3 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Client"
+                [(ngModel)]="field.clientname"
+                name="{{field.clientname}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Project"
+                [(ngModel)]="field.projectname"
+                name="{{field.projectname}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width"> 
+              <input
+                matInput
+                [matDatepicker]="startdat"
+                [(ngModel)]="field.eststartdate"
+                placeholder="Start Date"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+              <!-- <mat-datepicker-toggle
+                matSuffix
+                [for]="startdat"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #startdat></mat-datepicker> -->
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                [matDatepicker]="enddat"
+                [(ngModel)]="field.estenddate"
+                placeholder="Estimated End Date"
+                [ngModelOptions]="{ standalone: true }"
+                readonly
+              />
+              <!-- <mat-datepicker-toggle
+                matSuffix
+                [for]="enddat"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #enddat></mat-datepicker> -->
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 pl-1" style="font-size: 8pt">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                placeholder="Status"
+                [(ngModel)]="field.status"
+                name="{{field.status}}"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

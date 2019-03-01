@@ -22,7 +22,9 @@ import { LeaveComponent } from "../../components/myrequest/leave/leave.component
 import { MaternalLeaveComponent } from "../../components/myrequest/maternal-leave/maternal-leave.component";
 import { PaternalLeaveComponent } from "../../components/myrequest/paternal-leave/paternal-leave.component";
 import { ReportsComponent } from "../../components/hractivities/reports/reports.component";
+import { TrackasssetsComponent } from "../../components/itactivities/trackasssets/trackasssets.component";
 import { HractivitiesComponent } from "../../hractivities/hractivities.component";
+import { ItactivitiesComponent } from "../../itactivities/itactivities.component";
 
 export const AdminLayoutRoutes: Routes = [
   { path: "createaccount", component: CreateCustomerComponent },
@@ -104,6 +106,21 @@ export const AdminLayoutRoutes: Routes = [
       {
         path: "reports",
         component: ReportsComponent
+      }
+    ]
+  },
+  {
+    path: "it",
+    component: ItactivitiesComponent,
+    children: [
+      {
+        path: "",
+        redirectTo: "trackassets",
+        component: TrackasssetsComponent
+      },
+      {
+        path: "trackassets",
+        component: TrackasssetsComponent
       }
     ]
   },

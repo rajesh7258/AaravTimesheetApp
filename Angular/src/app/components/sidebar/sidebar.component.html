@@ -102,5 +102,11 @@
         <p>HR Activities</p>
       </a>
     </li>
+    <li *ngIf="isadmin === true" routerLinkActive="active" class="nav-item">
+        <a [routerLink]="'/it/trackassets'">
+          <i class="now-ui-icons files_paper"></i>
+          <p>IT Activities</p>
+        </a>
+      </li>
   </ul>
 </div>

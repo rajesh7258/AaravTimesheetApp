@@ -7,12 +7,13 @@ var bcrypt = require("bcryptjs");
 const config = require("../config/config.js");
 var generator = require("generate-password");
 var nodemailer = require('nodemailer');
+var fs = require('fs');
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'nagarajesh.venturi@aaravsolutions.com',
-    pass: 'M1nd@p3ac3'
+    pass: 'N3ed4p@S5w0rd'
   }
 });
 // const sendmail = require("sendmail")({
@@ -185,13 +186,14 @@ exports.create = async function (req, res) {
                                       jobstatus: req.body.status,
                                       emailverified: req.body.emailverified,
                                       imageURL: req.body.imageURL,
+                                      resumeURL: req.body.resumeURL,
                                       adminaccess: req.body.adminaccess,
                                       manager: req.body.manager,
                                       projects: req.body.projects,
                                       helathinsurance: req.body.health,
                                       skills: req.body.skills,
-                                      previousexpreince:
-                                        req.body.previousexpreince,
+                                      itassets: req.body.itassets,
+                                      previousexpreince: req.body.previousexpreince,
                                       fresher: req.body.fresher,
                                       itadmin: req.body.itadmin,
                                       leaves: req.body.leaves
@@ -330,6 +332,55 @@ exports.create = async function (req, res) {
   });
 };
 
+exports.saveFiles = async function (req,res) {
+  console.log("file input", req.body);
+  //check whether Elastic search is running or not
+  checkelasticsearch(function(data) {
+    if (data.message == "ok") {
+      //delete if getting replace here
+      
+
+      client.update(
+        {
+          index: "employees",
+          id: req.body.employeeid,
+          type: "employee",
+          body: {
+            script: {
+              lang: "painless",
+              inline:
+                "if(ctx._source.imageURL != params.imageURL){ ctx._source.imageURL = params.imageURL} if(ctx._source.resumeURL != params.resumeURL){	ctx._source.resumeURL = params.resumeURL}",
+              params: {
+                imageURL: req.body.imageURL,
+                resumeURL: req.body.resumeURL
+              }
+            }
+          }
+        },
+        function(err, resp, status) {
+          if (err) {
+            console.log("debug err");
+            console.log(err);
+            res.status(400).json({
+              message: "Error while updating files",
+              status: status,
+              error: err
+            });
+          } else {
+            res.status(200).json({
+              message: "files update sucessfully",
+              status: status,
+              response: resp
+            });
+          }
+        }
+      );
+    } else {
+      res.status(400).send({ Message: "Severisdown" });
+    }
+  });
+}
+
 exports.findAll = async function (req, res) {
   checkelasticsearch(function(data) {
     if (data.message == "ok") {
@@ -456,6 +507,14 @@ exports.getuserprofile = async function (req, res) {
 exports.uploadFile = async (req, res) => {
   res.status(200).send(req.file.filename);
 };
+
+exports.deleteFile = async (req, res) => {
+  fs.unlink( __basedir+"/uploads/"+req.body.filename, function(err) {
+    if(err) {
+      console.log('error while deleting file', err);
+    }
+  });
+}
 
 exports.downloadFile = async (req, res) => {
   let filename = req.params.filename;
@@ -848,6 +907,52 @@ exports.saveskills = async function (req, res) {
           } else {
             res.status(200).json({
               message: "skills update sucessfully",
+              status: status,
+              response: resp
+            });
+          }
+        }
+      );
+    } else {
+      res.status(400).send({ Message: "Severisdown" });
+    }
+  });
+};
+
+exports.saveassets = async function (req, res) {
+  console.log("input", req.body);
+  //check whether Elastic search is running or not
+  checkelasticsearch(function(data) {
+    if (data.message == "ok") {
+      console.log("asserts are:", req.body.itassets);
+      client.update(
+        {
+          index: "employees",
+          id: req.body.employeeid,
+          type: "employee",
+          body: {
+            script: {
+              lang: "painless",
+              inline:
+                "if(ctx._source.itassets.length != 0){for(int i = 0; i < params.itassets.length; ++i){ int k= 0;for (int j = 0; j < ctx._source.itassets.length; ++j)	{ if(ctx._source.itassets[j].id == params.itassets[i].id)	{k++}} if(k ==0){ctx._source.itassets.add(params.itassets[i])	}}	for(int k = 0; k < ctx._source.itassets.length; ++k){int m=0;	for(int l = 0; l < params.itassets.length; ++l){	if(ctx._source.itassets[k].id == params.itassets[l].id){m++}}if(m == 0){ctx._source.itassets.remove(k)}}}else{for(int i =0;i <params.itassets.length; ++i){ctx._source.itassets.add(params.itassets[i])}}",
+              params: {
+                itassets: req.body.itassets
+              }
+            }
+          }
+        },
+        function(err, resp, status) {
+          if (err) {
+            console.log("debug err");
+            console.log(err);
+            res.status(400).json({
+              message: "Error while updating it assets",
+              status: status,
+              error: err
+            });
+          } else {
+            res.status(200).json({
+              message: "assets update sucessfully",
               status: status,
               response: resp
             });
@@ -1550,17 +1655,17 @@ async function sendleaveemail(
     function(err, reply) {
       if (err) {
         console.log(err && err.stack);
-        res.status(400).json({
-          message: "Failed to send notification to manager",            
-        });
+        // res.status(400).json({
+        //   message: "Failed to send notification to manager",            
+        // });
       }
       if (reply) {
         console.log(reply);
-        res.status(200).json({
-          message: "Leave Notifications sent to manager",
-          status: status,
-          response: resp
-        });
+        // res.status(200).json({
+        //   message: "Leave Notifications sent to manager",
+        //   status: status,
+        //   response: resp
+        // });
       }
     }
   );

@@ -54,6 +54,9 @@ import { MyrequestsComponent } from "../../myrequests/myrequests.component";
 import { ViewleavesComponent } from "../../components/myrequest/viewleaves/viewleaves.component";
 import { RejectleaveComponent } from "../../components/manageractivity/rejectleave/rejectleave.component";
 import { HractivitiesComponent } from "../../hractivities/hractivities.component";
+import { ItactivitiesComponent } from "../../itactivities/itactivities.component";
+// import { DxReportViewerModule } from 'devexpress-reporting-angular';  
+
 const config = {
   breakPoints: {
     xs: { max: 600 },
@@ -119,7 +122,8 @@ const config = {
     MyrequestsComponent,
     ViewleavesComponent,
     RejectleaveComponent,
-    HractivitiesComponent
+    HractivitiesComponent,
+    ItactivitiesComponent
   ],
   providers: [AuthGuardPrimary],
 
